@@ -1,11 +1,11 @@
 package com.javabom.producercomsumer.producercomsumer.event;
 
 import com.javabom.producercomsumer.producercomsumer.dto.PayRequestDto;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.function.Consumer;
-
 @Slf4j
+@Getter
 public class PayEvent implements JavabomEvent {
 
     private final PayRequestDto payRequestDto;
@@ -15,8 +15,8 @@ public class PayEvent implements JavabomEvent {
     }
 
     @Override
-    public Consumer<String> comma() {
-        return payRequestDto.toEntity().pay(payRequestDto.getPrice());
+    public void comma() {
+        log.info("payType: {}, price:{} 의 결제요청", payRequestDto.getPayType().name(), payRequestDto.getPrice());
     }
 
 }

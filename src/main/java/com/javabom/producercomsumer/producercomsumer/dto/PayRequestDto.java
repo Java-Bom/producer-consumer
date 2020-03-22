@@ -1,6 +1,5 @@
 package com.javabom.producercomsumer.producercomsumer.dto;
 
-import com.javabom.producercomsumer.producercomsumer.domain.Bank;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,8 +20,5 @@ public class PayRequestDto {
         this.price = price;
     }
 
-    public Bank toEntity() {
-        return new Bank();
-    }
 
 }

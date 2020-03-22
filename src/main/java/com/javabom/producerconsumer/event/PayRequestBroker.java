@@ -8,10 +8,13 @@ import java.util.Queue;
 
 @Slf4j
 @RequiredArgsConstructor
-public class RequestBroker<E extends Event> {
+public class PayRequestBroker<E extends PayEvent> {
     private final Queue<E> broker;
 
     public void push(E e) {
+        if (broker.size() >= 100) {
+            throw new RuntimeException("결제가 불가능합니다.");
+        }
         broker.add(e);
     }
 

@@ -3,11 +3,11 @@ package com.javabom.producerconsumer.event;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public class ConsumerComponent<E extends Event> {
-    private final RequestBroker<E> broker;
+public class PayConsumer<E extends PayEvent> {
+    private final PayRequestBroker<E> broker;
     private final Consumer<E> consumer;
 
-    public ConsumerComponent(RequestBroker<E> broker, Consumer<E> consumer) {
+    public PayConsumer(PayRequestBroker<E> broker, Consumer<E> consumer) {
         this.broker = broker;
         this.consumer = consumer;
         new Thread(this::consume).start();

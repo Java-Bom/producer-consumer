@@ -1,32 +1,20 @@
 package com.javabom.producerconsumer.event;
 
-import com.javabom.producerconsumer.domain.ChargeFactory;
-import com.javabom.producerconsumer.domain.PayFactory;
+import com.javabom.producerconsumer.service.CardPayService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.LinkedList;
 
 @Configuration
+@RequiredArgsConstructor
 public class EventConfig {
+    private final CardPayService service;
 
     @Bean
-    public ConsumerComponent<PayEvent> payConsumer(){
-        return new ConsumerComponent<>(payBroker(), PayFactory::pay);
+    public PayConsumer<CardPayEvent> payConsumer() {
+        return new PayConsumer<>(new PayRequestBroker<>(new LinkedList<>()), service::pay);
     }
 
-    @Bean
-    public ConsumerComponent<ChargeEvent> chargeConsumer(){
-        return new ConsumerComponent<>(chargeBroker(), ChargeFactory::charge);
-    }
-
-    @Bean
-    public RequestBroker<PayEvent> payBroker() {
-        return new RequestBroker<>(new LinkedList<>());
-    }
-
-    @Bean
-    public RequestBroker<ChargeEvent> chargeBroker() {
-        return new RequestBroker<>(new LinkedList<>());
-    }
 }

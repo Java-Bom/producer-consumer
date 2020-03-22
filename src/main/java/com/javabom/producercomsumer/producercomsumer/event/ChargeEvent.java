@@ -1,11 +1,11 @@
 package com.javabom.producercomsumer.producercomsumer.event;
 
 import com.javabom.producercomsumer.producercomsumer.dto.ChargeRequestDto;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.function.Consumer;
-
 @Slf4j
+@Getter
 public class ChargeEvent implements JavabomEvent {
 
     private final ChargeRequestDto chargeRequestDto;
@@ -15,9 +15,10 @@ public class ChargeEvent implements JavabomEvent {
     }
 
     @Override
-    public Consumer<String> comma() {
-        log.info("cargeRequestDto: {}", chargeRequestDto.toString());
-        return chargeRequestDto.toEntity().charge(chargeRequestDto.getPrice());
+    public void comma() {
+        log.info("description: {}, price:{} 의 충전요청", chargeRequestDto.getDescription(), chargeRequestDto.getPrice());
     }
+
+
 
 }

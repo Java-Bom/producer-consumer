@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class DafaultConfig {
+public class DefaultConfig {
 
     @Bean
     public EventBroker<ChargeEvent> chargeEventBroker() {
@@ -21,12 +21,12 @@ public class DafaultConfig {
     }
 
     @Bean
-    public BankConsumer<ChargeEvent> chargeEventConsumer(EventBroker<ChargeEvent> chargeEventBroker) throws InterruptedException {
+    public BankConsumer<ChargeEvent> chargeEventConsumer(EventBroker<ChargeEvent> chargeEventBroker) {
         return new BankConsumer<>(chargeEventBroker);
     }
 
     @Bean
-    public BankConsumer<PayEvent> payEventConsumer(EventBroker<PayEvent> payEventBroker) throws InterruptedException {
+    public BankConsumer<PayEvent> payEventConsumer(EventBroker<PayEvent> payEventBroker) {
         return new BankConsumer<>(payEventBroker);
     }
 

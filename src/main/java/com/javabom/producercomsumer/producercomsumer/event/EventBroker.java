@@ -9,20 +9,17 @@ import java.util.Queue;
 @Slf4j
 public class EventBroker<T extends JavabomEvent> {
 
-    private Queue<T> eventQueue;
-
-    public EventBroker() {
-        log.info("========================EventBroker Constructor==========================");
-        eventQueue = new LinkedList<>();
-    }
+    private Queue<T> eventQueue = new LinkedList<>();
 
     public void offer(T javabomEvent) {
         log.info("offer {} Event in EventBroker", javabomEvent.getClass().getName());
         eventQueue.offer(javabomEvent);
     }
 
-    public T poll() {
-        log.info("poll Event in EventBroker");
+    public T poll() throws InterruptedException {
+        while (eventQueue.size() == 0) {
+            Thread.sleep(3000);
+        }
         return eventQueue.poll();
     }
 

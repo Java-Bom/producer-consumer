@@ -14,6 +14,5 @@ public class PayService {
 
     public void pay(PayRequestDto payRequestDto) {
         eventBroker.offer(new PayEvent(payRequestDto));
-
     }
 }

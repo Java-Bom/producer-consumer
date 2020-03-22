@@ -1,6 +1,5 @@
 package com.javabom.producercomsumer.producercomsumer.dto;
 
-import com.javabom.producercomsumer.producercomsumer.domain.Bank;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,11 +18,4 @@ public class ChargeRequestDto {
         this.description = description;
     }
 
-    public String comma() {
-        return "ChargeRequestDto";
-    }
-
-    public Bank toEntity() {
-        return new Bank();
-    }
 }

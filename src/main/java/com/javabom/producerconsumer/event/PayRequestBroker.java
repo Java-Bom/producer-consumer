@@ -1,20 +1,20 @@
 package com.javabom.producerconsumer.event;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
-import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 @Slf4j
-@RequiredArgsConstructor
 public class PayRequestBroker<E extends PayEvent> {
-    private final Queue<E> broker;
+    private final BlockingQueue<E> broker;
+
+    public PayRequestBroker(int capacity) {
+        this.broker = new LinkedBlockingQueue<>(capacity);
+    }
 
     public void push(E e) {
-        if (broker.size() >= 100) {
-            throw new RuntimeException("결제가 불가능합니다.");
-        }
         broker.add(e);
     }
 

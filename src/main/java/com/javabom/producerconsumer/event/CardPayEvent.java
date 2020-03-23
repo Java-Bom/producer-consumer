@@ -9,6 +9,6 @@ public class CardPayEvent implements PayEvent {
 
     @Override
     public String comma() {
-        return String.format("%s,%s,%s", amount, cardCompany);
+        return String.format("%d,%s", amount, cardCompany);
     }
 }

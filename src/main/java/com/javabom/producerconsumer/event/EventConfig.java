@@ -8,12 +8,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @RequiredArgsConstructor
 public class EventConfig {
-    private static final int EVENT_CAPACITY = 100;
+    public static final int EVENT_CAPACITY = 100;
+
     private final CardPayService service;
 
     @Bean
     public PayConsumer<CardPayEvent> payConsumer() {
-        return new PayConsumer<>(new PayRequestBroker<>(EVENT_CAPACITY), service::pay);
+        return new PayConsumer<>(CardPayEvent.class, service::pay);
     }
 
 }

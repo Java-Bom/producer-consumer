@@ -22,6 +22,7 @@ public class CashPayService {
                 .amount(amount)
                 .name(name)
                 .build();
+
         repository.save(cashPayHistory);
     }
 

@@ -16,7 +16,7 @@ public class PayConsumer<E extends PayEvent> {
         new Thread(this::consume).start();
     }
 
-    public void consume() {
+    private void consume() {
         while (running) {
             Optional<E> event = PayBrokerGroup.pop(eventType);
             event.ifPresent(consumer);

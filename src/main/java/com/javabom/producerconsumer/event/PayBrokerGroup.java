@@ -19,12 +19,14 @@ public enum PayBrokerGroup {
     private final Class<? extends PayEvent> eventType;
     private final PayRequestBroker<? extends PayEvent> broker;
 
+    @SuppressWarnings("unchecked")
     public static <E extends PayEvent> void put(Class<E> type, E event) {
         PayBrokerGroup group = findBroker(type);
         PayRequestBroker<E> broker = (PayRequestBroker<E>) group.broker;
         broker.push(type.cast(event));
     }
 
+    @SuppressWarnings("unchecked")
     public static <E extends PayEvent> Optional<E> pop(Class<E> type) {
         PayBrokerGroup group = findBroker(type);
         PayRequestBroker<E> broker = (PayRequestBroker<E>) group.broker;

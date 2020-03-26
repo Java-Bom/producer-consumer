@@ -8,10 +8,13 @@ import java.util.Queue;
 
 @Slf4j
 public class EventBroker<T extends JavabomEvent> {
-
+    private int LIMIT_QUEUE_SIZE = 100;
     private Queue<T> eventQueue = new LinkedList<>();
 
     public void offer(T javabomEvent) {
+        if (eventQueue.size() > LIMIT_QUEUE_SIZE) {
+            throw new IllegalArgumentException("더이상 요청할 수 없습니다");
+        }
         log.info("offer {} Event in EventBroker", javabomEvent.getClass().getName());
         eventQueue.offer(javabomEvent);
     }

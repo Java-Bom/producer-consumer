@@ -9,14 +9,14 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PayRequestDto {
+public class CashPaymentRequestDto {
 
-    private PayType payType;
+    private String name;
     private int price;
 
     @Builder
-    public PayRequestDto(@NotBlank PayType payType, int price) {
-        this.payType = payType;
+    public CashPaymentRequestDto(@NotBlank String name, int price) {
+        this.name = name;
         this.price = price;
     }
 

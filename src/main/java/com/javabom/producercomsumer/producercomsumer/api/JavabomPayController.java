@@ -1,9 +1,9 @@
 package com.javabom.producercomsumer.producercomsumer.api;
 
-import com.javabom.producercomsumer.producercomsumer.dto.ChargeRequestDto;
-import com.javabom.producercomsumer.producercomsumer.dto.PayRequestDto;
-import com.javabom.producercomsumer.producercomsumer.service.ChargeService;
-import com.javabom.producercomsumer.producercomsumer.service.PayService;
+import com.javabom.producercomsumer.producercomsumer.dto.CardPaymentRequestDto;
+import com.javabom.producercomsumer.producercomsumer.dto.CashPaymentRequestDto;
+import com.javabom.producercomsumer.producercomsumer.service.CardPaymentService;
+import com.javabom.producercomsumer.producercomsumer.service.CashPaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,19 +18,19 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class JavabomPayController {
 
-    private final PayService payService;
-    private final ChargeService chargeService;
+    private final CashPaymentService cashPaymentService;
+    private final CardPaymentService cardPaymentService;
 
-    @PostMapping("/pay")
-    public ResponseEntity<String> pay(@RequestBody PayRequestDto payRequestDto) {
-        payService.pay(payRequestDto);
+    @PostMapping("/cash")
+    public ResponseEntity<String> pay(@RequestBody CashPaymentRequestDto cashPaymentRequestDto) {
+        cashPaymentService.pay(cashPaymentRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping(value = "/charge")
-    public ResponseEntity<String> charge(@RequestBody ChargeRequestDto chargeRequestDto) {
-        log.info("ChargeRequestDto: {}", chargeRequestDto);
-        chargeService.charge(chargeRequestDto);
+    @PostMapping(value = "/card")
+    public ResponseEntity<String> charge(@RequestBody CardPaymentRequestDto cardPaymentRequestDto) {
+        log.info("ChargeRequestDto: {}", cardPaymentRequestDto);
+        cardPaymentService.charge(cardPaymentRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

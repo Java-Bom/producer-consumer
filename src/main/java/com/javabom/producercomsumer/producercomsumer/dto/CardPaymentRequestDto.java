@@ -8,14 +8,14 @@ import lombok.ToString;
 @ToString
 @Getter
 @NoArgsConstructor
-public class ChargeRequestDto {
+public class CardPaymentRequestDto {
     private int price;
-    private String description;
+    private String cardCompany;
 
     @Builder
-    public ChargeRequestDto(int price, String description) {
+    public CardPaymentRequestDto(int price, String cardCompany) {
         this.price = price;
-        this.description = description;
+        this.cardCompany = cardCompany;
     }
 
 }

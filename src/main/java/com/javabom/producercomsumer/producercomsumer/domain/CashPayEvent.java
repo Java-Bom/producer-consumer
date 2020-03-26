@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @ToString
-public class CashPayEvent<E> extends BankEvnet<E> {
+public class CashPayEvent<E> extends BankEvent<E> {
 
     public CashPayEvent(E dto) {
         this.requestDto = dto;
@@ -20,4 +20,11 @@ public class CashPayEvent<E> extends BankEvnet<E> {
         log.info(requestDto.toString());
         log.info("현금을 결제 했습니다 ๑◕‿◕๑ ");
     }
+
+    @Override
+    public String getEventContents() {
+        return requestDto.toString();
+    }
+
+
 }

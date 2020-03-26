@@ -2,8 +2,9 @@ package com.javabom.producercomsumer.producercomsumer.service;
 
 import com.javabom.producercomsumer.producercomsumer.domain.CardPayEvent;
 import com.javabom.producercomsumer.producercomsumer.domain.CashPayEvent;
-import com.javabom.producercomsumer.producercomsumer.dto.CashPayRequestDto;
 import com.javabom.producercomsumer.producercomsumer.dto.CardPayRequestDto;
+import com.javabom.producercomsumer.producercomsumer.dto.CashPayRequestDto;
+import com.javabom.producercomsumer.producercomsumer.event.Broker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +15,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BankService {
 
-    private final Broker<CashPayEvent<?>> payBroker;
-    private final Broker<CardPayEvent<?>> chargeBroker;
+    private final Broker<CashPayEvent<?>> cashBroker;
+    private final Broker<CardPayEvent<?>> cardBroker;
 
-    public void registerPayEvent(CardPayRequestDto payReqDto){
-        payBroker.registerEvent(new CashPayEvent<>(payReqDto));
+    public void registerCardPayEvent(CardPayRequestDto cardPayRequestDto){
+        cardBroker.registerEvent(new CardPayEvent<>(cardPayRequestDto));
     }
 
-    public void registerChargeEvent(CashPayRequestDto chargeReqDto){
-        chargeBroker.registerEvent(new CardPayEvent<>(chargeReqDto));
+    public void registerCashPayEvent(CashPayRequestDto cashPayRequestDto){
+        cashBroker.registerEvent(new CashPayEvent<>(cashPayRequestDto));
     }
 }

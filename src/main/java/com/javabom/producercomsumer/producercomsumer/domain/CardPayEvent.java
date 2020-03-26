@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @ToString
-public class CardPayEvent<E> extends BankEvnet<E> {
+public class CardPayEvent<E> extends BankEvent<E> {
 
     public CardPayEvent(E dto) {
         this.requestDto = dto;
@@ -17,7 +17,12 @@ public class CardPayEvent<E> extends BankEvnet<E> {
     @Override
     public void getExecutionText() {
         log.info(requestDto.toString());
-        log.info("카드를 결제 했습니다 ๑◕‿◕๑ ");
+        log.info("카드를 결제 했습니다  ◕ˇεˇ◕✿ ");
+    }
+
+    @Override
+    public String getEventContents() {
+        return requestDto.toString();
     }
 
 }

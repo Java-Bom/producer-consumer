@@ -1,0 +1,2 @@
+INSERT INTO ACCOUNT
+VALUES (1L, 'seojaeyeon');

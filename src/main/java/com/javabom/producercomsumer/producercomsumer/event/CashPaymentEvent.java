@@ -16,7 +16,7 @@ public class CashPaymentEvent implements JavabomEvent {
 
     @Override
     public void comma() {
-        log.info("payType: {}, price:{} 의 결제요청", cashPaymentRequestDto.getName(), cashPaymentRequestDto.getPrice());
+        log.info("CASHPAY 요쳥: {}, {}", cashPaymentRequestDto.getProductName(), cashPaymentRequestDto.getPrice());
     }
 
 }

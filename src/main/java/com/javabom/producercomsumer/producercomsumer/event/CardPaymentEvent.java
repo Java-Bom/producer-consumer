@@ -16,7 +16,7 @@ public class CardPaymentEvent implements JavabomEvent {
 
     @Override
     public void comma() {
-        log.info("description: {}, price:{} 의 충전요청", cardPaymentRequestDto.getCardCompany(), cardPaymentRequestDto.getPrice());
+        log.info("CARD PAY 요청: {}, {}", cardPaymentRequestDto.getCardCompany(), cardPaymentRequestDto.getPrice());
     }
 
 

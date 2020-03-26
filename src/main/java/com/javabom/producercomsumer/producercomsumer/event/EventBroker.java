@@ -8,7 +8,7 @@ import java.util.Queue;
 
 @Slf4j
 public class EventBroker<T extends JavabomEvent> {
-    private int LIMIT_QUEUE_SIZE = 100;
+    private static final int LIMIT_QUEUE_SIZE = 100;
     private Queue<T> eventQueue = new LinkedList<>();
 
     public void offer(T javabomEvent) {
@@ -20,7 +20,7 @@ public class EventBroker<T extends JavabomEvent> {
     }
 
     public T poll() throws InterruptedException {
-        while (eventQueue.size() == 0) {
+        while (eventQueue.size() <= 0) {
             Thread.sleep(3000);
         }
         return eventQueue.poll();

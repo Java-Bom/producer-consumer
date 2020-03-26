@@ -1,0 +1,31 @@
+spring:
+  profiles:
+    active: test
+
+---
+
+spring:
+  profiles: test
+  datasource:
+    data: classpath:data.sql
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    hikari:
+      jdbc-url: jdbc:h2:mem:test;
+  h2:
+    console:
+      enabled: true
+      path: /console
+  jpa:
+    show-sql: true
+    hibernate:
+      dialect: org.hibernate.dialect.MySQL5Dialect
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+
+
+server:
+  port: 8090

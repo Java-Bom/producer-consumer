@@ -1,9 +1,9 @@
 package com.javabom.producercomsumer.producercomsumer.service;
 
-import com.javabom.producercomsumer.producercomsumer.domain.MoneyCharge;
-import com.javabom.producercomsumer.producercomsumer.domain.MoneyPay;
-import com.javabom.producercomsumer.producercomsumer.dto.ChargeReqDto;
-import com.javabom.producercomsumer.producercomsumer.dto.PayReqDto;
+import com.javabom.producercomsumer.producercomsumer.domain.CardPayEvent;
+import com.javabom.producercomsumer.producercomsumer.domain.CashPayEvent;
+import com.javabom.producercomsumer.producercomsumer.dto.CashPayRequestDto;
+import com.javabom.producercomsumer.producercomsumer.dto.CardPayRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +14,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BankService {
 
-    private final Broker<MoneyPay<PayReqDto>> payBroker;
-    private final Broker<MoneyCharge<ChargeReqDto>> chargeBroker;
+    private final Broker<CashPayEvent<?>> payBroker;
+    private final Broker<CardPayEvent<?>> chargeBroker;
 
-    public void registerPayEvent(PayReqDto payReqDto){
-
-        payBroker.registerEvent(new MoneyPay<>(payReqDto));
+    public void registerPayEvent(CardPayRequestDto payReqDto){
+        payBroker.registerEvent(new CashPayEvent<>(payReqDto));
     }
 
-    public void registerChargeEvent(ChargeReqDto chargeReqDto){
-        chargeBroker.registerEvent(new MoneyCharge<>(chargeReqDto));
+    public void registerChargeEvent(CashPayRequestDto chargeReqDto){
+        chargeBroker.registerEvent(new CardPayEvent<>(chargeReqDto));
     }
 }

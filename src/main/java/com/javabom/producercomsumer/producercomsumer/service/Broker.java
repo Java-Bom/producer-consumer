@@ -1,6 +1,7 @@
 package com.javabom.producercomsumer.producercomsumer.service;
 
-import com.javabom.producercomsumer.producercomsumer.domain.JavaBomBank;
+import com.javabom.producercomsumer.producercomsumer.domain.BankEvnet;
+import com.javabom.producercomsumer.producercomsumer.dto.PayRequestDto;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.LinkedList;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 // 큐의 역할을 한다. 이벤트 생성하는 역할을 한다. // extends event
 // pull 할 때 .comma를 해야한다.
 @Slf4j
-public class Broker<E> {
+public class Broker<E extends BankEvnet<PayRequestDto>> {
 
     private Queue<E> bankEventQueue;
 

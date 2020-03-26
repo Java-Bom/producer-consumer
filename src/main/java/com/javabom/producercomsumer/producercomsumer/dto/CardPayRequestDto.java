@@ -8,6 +8,6 @@ import lombok.ToString;
  */
 @Getter
 @ToString
-public class ChargeReqDto {
-    private String description;
+public class CardPayRequestDto extends PayRequestDto {
+    private String cardCompanyName;
 }

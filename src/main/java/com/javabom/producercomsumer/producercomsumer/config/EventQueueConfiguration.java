@@ -1,6 +1,10 @@
 package com.javabom.producercomsumer.producercomsumer.config;
 
+
+import com.javabom.producercomsumer.producercomsumer.domain.BankEvnet;
+import com.javabom.producercomsumer.producercomsumer.dto.PayRequestDto;
 import com.javabom.producercomsumer.producercomsumer.service.Broker;
+import com.javabom.producercomsumer.producercomsumer.service.BrokerGroup;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,7 +15,10 @@ import org.springframework.context.annotation.Configuration;
 public class EventQueueConfiguration {
 
     @Bean
-    public Broker JavaBomQueue(){
-        return new Broker();
+    BrokerGroup makeBrokerGroup(){
+
+        Broker<BankEvnet<PayRequestDto>> bankEvnetBroker = new Broker<>();
+
+        return new BrokerGroup(, new Broker<>());
     }
 }

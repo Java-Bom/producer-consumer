@@ -21,7 +21,6 @@ public class BankConsumer<T extends JavabomEvent> {
                 try {
                     JavabomEvent javabomEvent = eventBroker.poll();
                     javabomEvent.comma();
-
                     if (javabomEvent instanceof CardPaymentEvent) {
                         CardPaymentRequestDto cardPaymentRequestDto = ((CardPaymentEvent) javabomEvent).getCardPaymentRequestDto();
                         Bank.charge().accept(cardPaymentRequestDto);
@@ -30,7 +29,6 @@ public class BankConsumer<T extends JavabomEvent> {
                         CashPaymentRequestDto cashPaymentRequestDto = ((CashPaymentEvent) javabomEvent).getCashPaymentRequestDto();
                         Bank.pay().accept(cashPaymentRequestDto);
                     }
-
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

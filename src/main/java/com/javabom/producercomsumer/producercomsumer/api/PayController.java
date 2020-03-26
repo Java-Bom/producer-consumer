@@ -15,20 +15,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class JavabomPayController {
+public class PayController {
 
     private final CashPaymentService cashPaymentService;
     private final CardPaymentService cardPaymentService;
 
     @PostMapping("/cash")
     public ResponseEntity<String> pay(@RequestBody CashPaymentRequestDto cashPaymentRequestDto) {
-        cashPaymentService.pay(cashPaymentRequestDto);
+        cashPaymentService.requestPay(cashPaymentRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping(value = "/card")
     public ResponseEntity<String> charge(@RequestBody CardPaymentRequestDto cardPaymentRequestDto) {
-        cardPaymentService.pay(cardPaymentRequestDto);
+        cardPaymentService.requestPay(cardPaymentRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

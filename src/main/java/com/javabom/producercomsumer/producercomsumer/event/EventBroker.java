@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 @Slf4j
-public class EventBroker<T extends JavabomEvent> {
+public class EventBroker<T extends PayEvent> {
     private static final int LIMIT_QUEUE_SIZE = 100;
     private Queue<T> eventQueue = new LinkedList<>();
 

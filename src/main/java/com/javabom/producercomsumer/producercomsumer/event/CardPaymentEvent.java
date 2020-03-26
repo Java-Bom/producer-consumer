@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Getter
-public class CardPaymentEvent implements JavabomEvent {
+public class CardPaymentEvent implements PayEvent {
 
     private final CardPaymentRequestDto cardPaymentRequestDto;
 
@@ -15,7 +15,7 @@ public class CardPaymentEvent implements JavabomEvent {
     }
 
     @Override
-    public void comma() {
+    public void run() {
         log.info("CARD PAY 요청: {}, {}", cardPaymentRequestDto.getCardCompany(), cardPaymentRequestDto.getPrice());
     }
 

@@ -21,6 +21,7 @@ repositories {
 dependencies {
     testCompile('org.assertj:assertj-core')
 
+    implementation('org.springframework.boot:spring-boot-starter-test')
     testImplementation('org.junit.jupiter:junit-jupiter-api')
     testCompile('org.junit.jupiter:junit-jupiter-params')
     testRuntime('org.junit.jupiter:junit-jupiter-engine')
@@ -32,6 +33,7 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
 }
 
 test {

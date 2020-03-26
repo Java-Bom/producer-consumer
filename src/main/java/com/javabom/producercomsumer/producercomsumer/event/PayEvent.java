@@ -1,5 +1,5 @@
 package com.javabom.producercomsumer.producercomsumer.event;
 
-public interface JavabomEvent {
-    void comma();
+public interface PayEvent {
+    void run();
 }

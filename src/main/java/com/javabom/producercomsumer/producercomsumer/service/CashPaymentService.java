@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class CashPaymentService implements PaymentService<CashPaymentRequestDto> {
+public class CashPaymentService implements PaymentService<CashPaymentRequestDto, CashPaymentEvent> {
 
     private final EventBroker<CashPaymentEvent> eventBroker;
     private final AccountRepository accountRepository;
@@ -20,13 +20,13 @@ public class CashPaymentService implements PaymentService<CashPaymentRequestDto>
         eventBroker.offer(new CashPaymentEvent(cashPaymentRequestDto));
     }
 
-
     @Override
     @Transactional
-    public void pay(CashPaymentRequestDto cashPaymentRequestDto) {
-        Account account = accountRepository.findAccountByUserId(cashPaymentRequestDto.getUserId())
+    public void pay(CashPaymentEvent paymentEvent) {
+        Account account = accountRepository.findAccountByUserId(paymentEvent.getCashPaymentRequestDto().getUserId())
                 .orElseThrow(IllegalArgumentException::new);
 
-        account.cashPay().accept(cashPaymentRequestDto);
+        account.cashPay().accept(paymentEvent.getCashPaymentRequestDto());
     }
+
 }

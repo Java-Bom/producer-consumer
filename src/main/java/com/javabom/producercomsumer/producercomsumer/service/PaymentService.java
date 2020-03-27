@@ -1,7 +1,9 @@
 package com.javabom.producercomsumer.producercomsumer.service;
 
-public interface PaymentService<E> {
-    void requestPay(E requestDto);
+import com.javabom.producercomsumer.producercomsumer.event.PayEvent;
 
-    void pay(E requestDto);
+public interface PaymentService<E, T extends PayEvent> {
+    void requestPay(E payRequestDto);
+
+    void pay(T paymentEvent);
 }

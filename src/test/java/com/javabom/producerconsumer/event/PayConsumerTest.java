@@ -1,96 +1,91 @@
 package com.javabom.producerconsumer.event;
 
+import com.javabom.producerconsumer.event.message.CardPayEvent;
+import com.javabom.producerconsumer.event.message.CashPayEvent;
+import com.javabom.producerconsumer.event.message.PayType;
+import com.javabom.producerconsumer.event.process.PayBrokerGroup;
+import com.javabom.producerconsumer.event.process.PayConsumer;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Consumer;
 
+import static com.javabom.producerconsumer.event.message.PayType.CARD;
+import static com.javabom.producerconsumer.event.message.PayType.CASH;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("이벤트 소비자 테스트")
 class PayConsumerTest {
 
+    private PayConsumer consumer;
+
+    @AfterEach
+    void tearDown() {
+        consumer.stop();
+        consumer = null;
+    }
+
     @Test
-    @DisplayName("이벤트 소비자는 한가지 타입의 이벤트만 소비가능하다.")
+    @DisplayName("이벤트 소비자는 그룹에 들어있는 이벤트 큐만큼 스레드를 생성해 이벤트를 소비한다")
     void consume() throws InterruptedException {
         //given
-        CardPayEvent cardPayEvent = CardPayEvent.testBuilder()
-                .cardCompany("신한카드")
-                .amount(2000L)
-                .build();
-
-        CardPayEvent cardPayEvent2 = CardPayEvent.testBuilder()
-                .cardCompany("현대카드")
-                .amount(2000L)
-                .build();
-
-        CashPayEvent cashPayEvent = CashPayEvent.testBuilder()
-                .amount(3000L)
-                .name("최유성")
-                .build();
-
-        //when
-        PayBrokerGroup.put(CardPayEvent.class, cardPayEvent);
-        PayBrokerGroup.put(CashPayEvent.class, cashPayEvent);
-        PayBrokerGroup.put(CardPayEvent.class, cardPayEvent2);
-
-        List<String> actualList = new ArrayList<>();
         CountDownLatch latch = new CountDownLatch(2);
+        Map<String, Integer> hitMap = hitMap();
 
-        //이벤트 수행
-        PayConsumer<CardPayEvent> consumer = new PayConsumer<>(CardPayEvent.class, consumer(actualList, latch));
-        latch.await();
-
-        //then
-        assertThat(actualList.size()).isEqualTo(2);
-        assertThat(actualList).contains(cardPayEvent.comma());
-        assertThat(actualList).contains(cardPayEvent2.comma());
-
-        consumer.stop();
-    }
-
-
-    //// TODO: 2020. 3. 26.  실패할 수도 있을거같다.
-    @Test
-    @DisplayName("이벤트 소비는 한개의 스레드가 한다.")
-    void consume2() throws InterruptedException {
-        //given
-        CardPayEvent cardPayEvent = CardPayEvent.testBuilder()
-                .cardCompany("신한카드")
-                .amount(2000L)
+        CardPayEvent cardPayEvent = CardPayEvent.builder()
+                .consumer(cardConsumer(hitMap, latch))
                 .build();
 
-        CardPayEvent cardPayEvent2 = CardPayEvent.testBuilder()
-                .cardCompany("삼성카드")
-                .amount(2000L)
+        CardPayEvent cardPayEvent2 = CardPayEvent.builder()
+                .consumer(cardConsumer(hitMap, latch))
                 .build();
 
+        CashPayEvent cashPayEvent = CashPayEvent.builder()
+                .consumer(cashConsumer(hitMap, latch))
+                .build();
+
+        PayBrokerGroup payBrokerGroup = new PayBrokerGroup();
+
+        payBrokerGroup.put(CardPayEvent.class, cardPayEvent);
+        payBrokerGroup.put(CardPayEvent.class, cardPayEvent2);
+        payBrokerGroup.put(CashPayEvent.class, cashPayEvent);
         //when
-        PayBrokerGroup.put(CardPayEvent.class, cardPayEvent);
-        PayBrokerGroup.put(CardPayEvent.class, cardPayEvent2);
-
-        List<String> actualList = new ArrayList<>();
-        CountDownLatch latch = new CountDownLatch(1);
-
         //이벤트 수행
-        PayConsumer<CardPayEvent> consumer = new PayConsumer<>(CardPayEvent.class, consumer(actualList, latch));
+        consumer = new PayConsumer(payBrokerGroup);
         latch.await();
 
         //then
-        assertThat(actualList.size()).isEqualTo(1);
-        assertThat(actualList).contains(cardPayEvent.comma());
-        consumer.stop();
+        assertThat(hitMap.get("thread_" + CARD.getEventClass().getSimpleName())).isEqualTo(1);
+        assertThat(hitMap.get("thread_" + CASH.getEventClass().getSimpleName())).isEqualTo(1);
     }
 
-
-    private Consumer<CardPayEvent> consumer(List<String> commaStrings, CountDownLatch latch) {
+    private Consumer<CardPayEvent> cardConsumer(Map<String, Integer> hitMap, CountDownLatch latch) {
         return (cardPayEvent) -> {
-            commaStrings.add(cardPayEvent.comma());
+            Integer count = hitMap.get(Thread.currentThread().getName());
+            hitMap.put(Thread.currentThread().getName(), count + 1);
             latch.countDown();
         };
     }
+
+    private Consumer<CashPayEvent> cashConsumer(Map<String, Integer> hitMap, CountDownLatch latch) {
+        return (cashPayEvent) -> {
+            Integer count = hitMap.get(Thread.currentThread().getName());
+            hitMap.put(Thread.currentThread().getName(), count + 1);
+            latch.countDown();
+        };
+    }
+
+    private Map<String, Integer> hitMap() {
+        Map<String, Integer> hitMap = new HashMap<>();
+        for (PayType type : PayType.values()) {
+            hitMap.put("thread_" + type.getEventClass().getSimpleName(), 0);
+        }
+        return hitMap;
+    }
+
 
 }

@@ -1,8 +1,11 @@
 package com.javabom.producerconsumer.web;
 
-import com.javabom.producerconsumer.event.CardPayEvent;
-import com.javabom.producerconsumer.event.CashPayEvent;
-import com.javabom.producerconsumer.event.PayBrokerGroup;
+import com.javabom.producerconsumer.event.message.CardPayEvent;
+import com.javabom.producerconsumer.event.message.CashPayEvent;
+import com.javabom.producerconsumer.event.process.PayBrokerGroup;
+import com.javabom.producerconsumer.service.PayService;
+import com.javabom.producerconsumer.web.dto.CardPayRequest;
+import com.javabom.producerconsumer.web.dto.CashPayRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,16 +16,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class PayController {
 
+    private final PayBrokerGroup payBrokerGroup;
+    private final PayService payService;
 
     @PostMapping("/card")
-    public ResponseEntity<Void> requestPay(@RequestBody CardPayEvent event) {
-        PayBrokerGroup.put(CardPayEvent.class, event);
+    public ResponseEntity<Void> requestPay(@RequestBody CardPayRequest request) {
+        payBrokerGroup.put(CardPayEvent.class, request.toEvent(payService::pay));
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/cash")
-    public ResponseEntity<Void> requestPay(@RequestBody CashPayEvent event) {
-        PayBrokerGroup.put(CashPayEvent.class, event);
+    public ResponseEntity<Void> requestPay(@RequestBody CashPayRequest request) {
+        payBrokerGroup.put(CashPayEvent.class, request.toEvent(payService::pay));
         return ResponseEntity.ok().build();
     }
+
 }

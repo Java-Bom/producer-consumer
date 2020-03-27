@@ -1,5 +1,7 @@
 package com.javabom.producerconsumer.event;
 
+import com.javabom.producerconsumer.event.message.PayEvent;
+import com.javabom.producerconsumer.event.process.PayRequestBroker;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -43,6 +45,10 @@ class PayRequestBrokerTest {
         @Override
         public String comma() {
             return id.toString();
+        }
+
+        @Override
+        public void consume() {
         }
     }
 }

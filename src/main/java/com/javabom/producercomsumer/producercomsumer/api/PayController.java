@@ -6,7 +6,6 @@ import com.javabom.producercomsumer.producercomsumer.service.CardPaymentService;
 import com.javabom.producercomsumer.producercomsumer.service.CashPaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,13 +22,13 @@ public class PayController {
     @PostMapping("/cash")
     public ResponseEntity<String> pay(@RequestBody CashPaymentRequestDto cashPaymentRequestDto) {
         cashPaymentService.requestPay(cashPaymentRequestDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok("정상적으로 지불되었습니다");
     }
 
     @PostMapping(value = "/card")
     public ResponseEntity<String> charge(@RequestBody CardPaymentRequestDto cardPaymentRequestDto) {
         cardPaymentService.requestPay(cardPaymentRequestDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok("정상적으로 지불되었습니다");
     }
 
 }

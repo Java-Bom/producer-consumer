@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 @Slf4j
 @Entity
@@ -29,18 +28,15 @@ public class Account {
     @JoinColumn(name = "ACCOUNT_ID")
     private List<CashPaymentRecordEntity> cashPaymentHistories = new ArrayList<>();
 
-    public Consumer<CardPaymentRequestDto> cardPay() {
-        return (cardPaymentRequestDto) -> {
-            log.info("CardPay: {}, {}", cardPaymentRequestDto.getCardCompany(), cardPaymentRequestDto.getPrice());
-            this.cardPaymentHistories.add(new CardPaymentRecordEntity(cardPaymentRequestDto));
-        };
+    public void cardPay(CardPaymentRequestDto cardPaymentRequestDto) {
+        log.info("CardPay: {}, {}", cardPaymentRequestDto.getCardCompany(), cardPaymentRequestDto.getPrice());
+        this.cardPaymentHistories.add(new CardPaymentRecordEntity(cardPaymentRequestDto));
     }
 
-    public Consumer<CashPaymentRequestDto> cashPay() {
-        return (cashPaymentRequestDto) -> {
-            log.info("CardPay: {}, {}", cashPaymentRequestDto.getProductName(), cashPaymentRequestDto.getPrice());
-            this.cashPaymentHistories.add(new CashPaymentRecordEntity(cashPaymentRequestDto));
-        };
+    public void cashPay(CashPaymentRequestDto cashPaymentRequestDto) {
+        log.info("CardPay: {}, {}", cashPaymentRequestDto.getProductName(), cashPaymentRequestDto.getPrice());
+        this.cashPaymentHistories.add(new CashPaymentRecordEntity(cashPaymentRequestDto));
     }
+
 
 }

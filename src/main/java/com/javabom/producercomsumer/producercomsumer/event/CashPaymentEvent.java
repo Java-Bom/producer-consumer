@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Getter
-public class CashPaymentEvent implements PayEvent {
+public class CashPaymentEvent implements PaymentEvent {
 
     private final CashPaymentRequestDto cashPaymentRequestDto;
 

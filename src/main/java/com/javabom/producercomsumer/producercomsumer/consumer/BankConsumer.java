@@ -1,22 +1,26 @@
 package com.javabom.producercomsumer.producercomsumer.consumer;
 
 import com.javabom.producercomsumer.producercomsumer.event.EventBroker;
-import com.javabom.producercomsumer.producercomsumer.event.PayEvent;
-import com.javabom.producercomsumer.producercomsumer.service.PaymentService;
-import lombok.RequiredArgsConstructor;
+import com.javabom.producercomsumer.producercomsumer.event.PaymentEvent;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.function.Consumer;
 
 
 @Slf4j
-@RequiredArgsConstructor
-public class BankConsumer<T extends PayEvent, E> {
+public class BankConsumer<T extends PaymentEvent> {
 
-    public BankConsumer(EventBroker<T> eventBroker, PaymentService<E, T> paymentService) {
+    private final EventBroker<T> eventBroker;
+    private final Consumer<T> consumer;
+
+    public BankConsumer(EventBroker<T> eventBroker, Consumer<T> consumer) {
+        this.eventBroker = eventBroker;
+        this.consumer = consumer;
         Thread thread = new Thread(() -> {
             while (true) {
                 try {
-                    PayEvent payEvent = eventBroker.poll();
-                    paymentService.pay((T) payEvent);
+                    PaymentEvent paymentEvent = this.eventBroker.poll();
+                    this.consumer.accept((T) paymentEvent);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

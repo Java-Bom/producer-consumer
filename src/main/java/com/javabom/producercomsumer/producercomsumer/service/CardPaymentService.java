@@ -25,7 +25,8 @@ public class CardPaymentService implements PaymentService<CardPaymentRequestDto,
     public void pay(CardPaymentEvent paymentEvent) {
         Account account = accountRepository.findAccountByUserId(paymentEvent.getCardPaymentRequestDto().getUserId())
                 .orElseThrow(IllegalArgumentException::new);
-        account.cardPay().accept(paymentEvent.getCardPaymentRequestDto());
+
+        account.cardPay(paymentEvent.getCardPaymentRequestDto());
 
     }
 

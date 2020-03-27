@@ -25,8 +25,7 @@ public class CashPaymentService implements PaymentService<CashPaymentRequestDto,
     public void pay(CashPaymentEvent paymentEvent) {
         Account account = accountRepository.findAccountByUserId(paymentEvent.getCashPaymentRequestDto().getUserId())
                 .orElseThrow(IllegalArgumentException::new);
-
-        account.cashPay().accept(paymentEvent.getCashPaymentRequestDto());
+        account.cashPay(paymentEvent.getCashPaymentRequestDto());
     }
 
 }

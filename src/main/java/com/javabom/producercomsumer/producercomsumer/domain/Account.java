@@ -34,7 +34,7 @@ public class Account {
     }
 
     public void cashPay(CashPaymentRequestDto cashPaymentRequestDto) {
-        log.info("CardPay: {}, {}", cashPaymentRequestDto.getProductName(), cashPaymentRequestDto.getPrice());
+        log.info("CashPay: {}, {}", cashPaymentRequestDto.getProductName(), cashPaymentRequestDto.getPrice());
         this.cashPaymentHistories.add(new CashPaymentRecordEntity(cashPaymentRequestDto));
     }
 

@@ -19,3 +19,45 @@ Content-Type: application/json
 }
 
 ###
+POST http://localhost:8090/cash
+Content-Type: application/json
+
+{
+  "userId": "seojaeyeon",
+  "productName": "감자",
+  "price": 12000
+}
+
+###
+
+POST http://localhost:8090/card
+Content-Type: application/json
+
+{
+  "userId": "seojaeyeon",
+  "cardCompany": "신한",
+  "price": 12000
+}
+
+###
+POST http://localhost:8090/cash
+Content-Type: application/json
+
+{
+  "userId": "seojaeyeon",
+  "productName": "감자",
+  "price": 12000
+}
+
+###
+
+POST http://localhost:8090/card
+Content-Type: application/json
+
+{
+  "userId": "seojaeyeon",
+  "cardCompany": "신한",
+  "price": 12000
+}
+
+###

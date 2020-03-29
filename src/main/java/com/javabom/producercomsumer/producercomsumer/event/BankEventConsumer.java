@@ -10,14 +10,12 @@ import org.springframework.stereotype.Component;
  * Created by jyami on 2020/03/21
  */
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public class BankEventConsumer<T extends BankEvent<?>> implements Runnable {
 
     private boolean nowRun = false;
     private final Broker<T> broker;
 
-    @SneakyThrows
     @Override
     public void run() {
         nowRun = true;
@@ -25,7 +23,11 @@ public class BankEventConsumer<T extends BankEvent<?>> implements Runnable {
             if(broker.hasConsumeEvent()){
                 broker.consumeEvent().getExecutionText();
             }
-            Thread.sleep(3000);
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

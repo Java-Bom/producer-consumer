@@ -16,8 +16,8 @@ public class EventConsumer {
     private final BankEventConsumer<CashPayEvent<?>> cashPayEventBankEventConsumer;
 
     public void run(){
-        cardPayEventBankEventConsumer.run();
-        cashPayEventBankEventConsumer.run();
+        new Thread(cardPayEventBankEventConsumer).start();
+        new Thread(cashPayEventBankEventConsumer).start();
     }
 
     public void shutDownRun(){

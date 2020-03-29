@@ -1,0 +1,12 @@
+POST http://localhost:8080/api/charge
+Content-Type: application/json
+
+{
+  "name": "박찬인",
+  "money": 5000,
+  "description": "충전"
+}
+
+###
+
+

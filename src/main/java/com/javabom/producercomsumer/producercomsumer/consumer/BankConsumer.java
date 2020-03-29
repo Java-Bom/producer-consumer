@@ -16,17 +16,18 @@ public class BankConsumer<T extends PaymentEvent> {
     public BankConsumer(EventBroker<T> eventBroker, Consumer<T> consumer) {
         this.eventBroker = eventBroker;
         this.consumer = consumer;
-        Thread thread = new Thread(() -> {
-            while (true) {
-                try {
-                    PaymentEvent paymentEvent = this.eventBroker.poll();
-                    this.consumer.accept((T) paymentEvent);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, Math.random() + "번 스레드");
-        thread.start();
 
+        new Thread(this::consume, Math.random() + "번 스레드").start();
+    }
+
+    private void consume() {
+        while (true) {
+            try {
+                T paymentEvent = this.eventBroker.poll();
+                this.consumer.accept(paymentEvent);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

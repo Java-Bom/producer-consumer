@@ -32,5 +32,4 @@ public class DefaultConfig {
         return new BankConsumer<>(payEventBroker, cashPaymentService::pay);
     }
 
-
 }

@@ -5,6 +5,7 @@ import com.javabom.producercomsumer.producercomsumer.domain.AccountRepository;
 import com.javabom.producercomsumer.producercomsumer.dto.CardPaymentRequestDto;
 import com.javabom.producercomsumer.producercomsumer.event.CardPaymentEvent;
 import com.javabom.producercomsumer.producercomsumer.event.EventBroker;
+import com.javabom.producercomsumer.producercomsumer.service.exception.PayFailException;
 import com.javabom.producercomsumer.producercomsumer.support.PayVendor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +27,11 @@ public class CardPaymentService {
 
     @Transactional
     public void pay(final CardPaymentEvent paymentEvent) {
-        if (!successRequestPayToVendor(paymentEvent)) {
-            recordFailToCardPayment(paymentEvent);
+        try {
+            cardPayVendor.requestPayToVendor(paymentEvent);
+        } catch (PayFailException payFailException) {
+            log.info("카드결제 처리 시 익셉션 발생: {} ", paymentEvent.toString());
+            requestPay(paymentEvent);
             return;
         }
 
@@ -37,8 +41,18 @@ public class CardPaymentService {
         account.cardPay(paymentEvent.getCardPaymentRequestDto(), true);
     }
 
-    private boolean successRequestPayToVendor(CardPaymentEvent paymentEvent) {
-        return cardPayVendor.requestPayToVendor(paymentEvent);
+    private void requestPay(CardPaymentEvent paymentEvent) {
+        if (isMaximumTry(paymentEvent)) {
+            log.info("카드결제시도 횟수를 초과하여 실패내역 기록합니다: {}", paymentEvent.toString());
+            recordFailToCardPayment(paymentEvent);
+            return;
+        }
+        log.info("카드결제 이벤트큐에 다시 삽입: {}", paymentEvent.toString());
+        eventBroker.offer(paymentEvent);
+    }
+
+    private boolean isMaximumTry(CardPaymentEvent paymentEvent) {
+        return paymentEvent.isMaximumTry();
     }
 
     private void recordFailToCardPayment(CardPaymentEvent paymentEvent) {

@@ -9,8 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 public class CashPaymentEvent implements PaymentEvent {
 
     private static final String EVENT_NAME = "현금결제이벤트";
+    public static final int MAXIMUM_TRYCOUNT = 2;
 
     private final CashPaymentRequestDto cashPaymentRequestDto;
+    private int tryCount;
 
     public CashPaymentEvent(CashPaymentRequestDto cashPaymentRequestDto) {
         this.cashPaymentRequestDto = cashPaymentRequestDto;
@@ -19,6 +21,12 @@ public class CashPaymentEvent implements PaymentEvent {
     @Override
     public void run() {
         log.info("CASHPAY 요쳥: {}, {}", cashPaymentRequestDto.getProductName(), cashPaymentRequestDto.getPrice());
+        tryCount++;
+    }
+
+    @Override
+    public boolean isMaximumTry() {
+        return tryCount >= MAXIMUM_TRYCOUNT;
     }
 
     @Override

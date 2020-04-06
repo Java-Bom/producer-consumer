@@ -5,6 +5,7 @@ import com.javabom.producercomsumer.producercomsumer.domain.AccountRepository;
 import com.javabom.producercomsumer.producercomsumer.dto.CashPaymentRequestDto;
 import com.javabom.producercomsumer.producercomsumer.event.CashPaymentEvent;
 import com.javabom.producercomsumer.producercomsumer.event.EventBroker;
+import com.javabom.producercomsumer.producercomsumer.service.exception.PayFailException;
 import com.javabom.producercomsumer.producercomsumer.support.PayVendor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,19 +27,29 @@ public class CashPaymentService {
 
     @Transactional
     public void pay(final CashPaymentEvent paymentEvent) {
-        if (!successRequestPayToVendor(paymentEvent)) {
-            recordFailToCashPayment(paymentEvent);
+        try {
+            cashPayVendor.requestPayToVendor(paymentEvent);
+        } catch (PayFailException payFailException) {
+            requestPay(paymentEvent);
             return;
         }
+
         Account account = accountRepository.findAccountByUserId(paymentEvent.getCashPaymentRequestDto().getUserId())
                 .orElseThrow(IllegalArgumentException::new);
         account.cashPay(paymentEvent.getCashPaymentRequestDto(), true);
     }
 
-    private boolean successRequestPayToVendor(CashPaymentEvent paymentEvent) {
-        return cashPayVendor.requestPayToVendor(paymentEvent);
+    private void requestPay(CashPaymentEvent paymentEvent) {
+        if (isMaximumTry(paymentEvent)) {
+            recordFailToCashPayment(paymentEvent);
+            return;
+        }
+        eventBroker.offer(paymentEvent);
     }
 
+    private boolean isMaximumTry(CashPaymentEvent paymentEvent) {
+        return paymentEvent.isMaximumTry();
+    }
 
     private void recordFailToCashPayment(CashPaymentEvent paymentEvent) {
         Account account = accountRepository.findAccountByUserId(paymentEvent.getCashPaymentRequestDto().getUserId())

@@ -9,7 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 public class CardPaymentEvent implements PaymentEvent {
 
     private static final String EVENT_NAME = "카드결제이벤트";
+    public static final int MAXIMUM_TRY_COUNT = 3;
+
     private final CardPaymentRequestDto cardPaymentRequestDto;
+    private int tryCount;
 
     public CardPaymentEvent(CardPaymentRequestDto cardPaymentRequestDto) {
         this.cardPaymentRequestDto = cardPaymentRequestDto;
@@ -18,6 +21,12 @@ public class CardPaymentEvent implements PaymentEvent {
     @Override
     public void run() {
         log.info("CARD PAY 요청: {}, {}", cardPaymentRequestDto.getCardCompany(), cardPaymentRequestDto.getPrice());
+        tryCount++;
+    }
+
+    @Override
+    public boolean isMaximumTry() {
+        return tryCount >= MAXIMUM_TRY_COUNT;
     }
 
     @Override

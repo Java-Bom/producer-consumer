@@ -25,8 +25,11 @@ public class CardPaymentRecordEntity {
 
     private int price;
 
-    public CardPaymentRecordEntity(CardPaymentRequestDto cardPaymentRequestDto) {
+    private boolean complete;
+
+    public CardPaymentRecordEntity(CardPaymentRequestDto cardPaymentRequestDto, boolean complete) {
         this.cardName = cardPaymentRequestDto.getCardCompany();
         this.price = cardPaymentRequestDto.getPrice();
+        this.complete = complete;
     }
 }

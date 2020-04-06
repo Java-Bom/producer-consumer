@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 public class CashPaymentEvent implements PaymentEvent {
 
+    private static final String EVENT_NAME = "현금결제이벤트";
+
     private final CashPaymentRequestDto cashPaymentRequestDto;
 
     public CashPaymentEvent(CashPaymentRequestDto cashPaymentRequestDto) {
@@ -19,4 +21,10 @@ public class CashPaymentEvent implements PaymentEvent {
         log.info("CASHPAY 요쳥: {}, {}", cashPaymentRequestDto.getProductName(), cashPaymentRequestDto.getPrice());
     }
 
+    @Override
+    public String toString() {
+        return "CashPaymentEvent{" +
+                "cashPaymentRequestDto=" + cashPaymentRequestDto +
+                '}';
+    }
 }

@@ -1,4 +1,4 @@
-POST http://localhost:8090/cash
+POST http://localhost:8888/cash
 Content-Type: application/json
 
 {
@@ -9,7 +9,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8090/card
+POST http://localhost:8888/card
 Content-Type: application/json
 
 {
@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8090/cash
+POST http://localhost:8888/cash
 Content-Type: application/json
 
 {
@@ -30,7 +30,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8090/card
+POST http://localhost:8888/card
 Content-Type: application/json
 
 {
@@ -40,7 +40,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8090/cash
+POST http://localhost:8888/cash
 Content-Type: application/json
 
 {
@@ -51,7 +51,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8090/card
+POST http://localhost:8888/card
 Content-Type: application/json
 
 {

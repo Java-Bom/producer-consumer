@@ -2,9 +2,7 @@ package com.javabom.producercomsumer.producercomsumer.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-@ToString
 @Getter
 @NoArgsConstructor
 public class CardPaymentRequestDto {
@@ -16,5 +14,14 @@ public class CardPaymentRequestDto {
         this.userId = userId;
         this.price = price;
         this.cardCompany = cardCompany;
+    }
+
+    @Override
+    public String toString() {
+        return "CardPaymentRequestDto{" +
+                "userId='" + userId + '\'' +
+                ", price=" + price +
+                ", cardCompany='" + cardCompany + '\'' +
+                '}';
     }
 }

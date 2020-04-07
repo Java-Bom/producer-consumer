@@ -40,15 +40,11 @@ public class CashPaymentService {
     }
 
     private void requestPay(CashPaymentEvent paymentEvent) {
-        if (isMaximumTry(paymentEvent)) {
+        if (paymentEvent.isMaximumTry()) {
             recordFailToCashPayment(paymentEvent);
             return;
         }
         eventBroker.offer(paymentEvent);
-    }
-
-    private boolean isMaximumTry(CashPaymentEvent paymentEvent) {
-        return paymentEvent.isMaximumTry();
     }
 
     private void recordFailToCashPayment(CashPaymentEvent paymentEvent) {

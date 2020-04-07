@@ -8,6 +8,7 @@ import com.javabom.producercomsumer.producercomsumer.service.CardPaymentService;
 import com.javabom.producercomsumer.producercomsumer.service.CashPaymentService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @Configuration
 public class DefaultConfig {
@@ -23,13 +24,32 @@ public class DefaultConfig {
     }
 
     @Bean
-    public BankConsumer<CardPaymentEvent> chargeEventConsumer(EventBroker<CardPaymentEvent> chargeEventBroker, CardPaymentService cardPaymentService) {
-        return new BankConsumer<>(chargeEventBroker, cardPaymentService::pay);
+    public BankConsumer<CardPaymentEvent> chargeEventConsumer(EventBroker<CardPaymentEvent> chargeEventBroker, CardPaymentService cardPaymentService, ThreadPoolTaskExecutor cardPayThreadPool) {
+        return new BankConsumer<>(chargeEventBroker, cardPaymentService::pay, cardPayThreadPool);
     }
 
     @Bean
-    public BankConsumer<CashPaymentEvent> payEventConsumer(EventBroker<CashPaymentEvent> payEventBroker, CashPaymentService cashPaymentService) {
-        return new BankConsumer<>(payEventBroker, cashPaymentService::pay);
+    public BankConsumer<CashPaymentEvent> payEventConsumer(EventBroker<CashPaymentEvent> payEventBroker, CashPaymentService cashPaymentService, ThreadPoolTaskExecutor cashPayThreadPool) {
+        return new BankConsumer<>(payEventBroker, cashPaymentService::pay, cashPayThreadPool);
+    }
+
+
+    @Bean
+    public ThreadPoolTaskExecutor cardPayThreadPool() {
+        ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+        threadPoolTaskExecutor.setMaxPoolSize(100);
+        threadPoolTaskExecutor.setCorePoolSize(5);
+        threadPoolTaskExecutor.setThreadGroupName("CARD PAYMENT THREAD");
+        return threadPoolTaskExecutor;
+    }
+
+    @Bean
+    public ThreadPoolTaskExecutor cashPayThreadPool() {
+        ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+        threadPoolTaskExecutor.setMaxPoolSize(100);
+        threadPoolTaskExecutor.setCorePoolSize(5);
+        threadPoolTaskExecutor.setThreadGroupName("CASH PAYMENT THREAD");
+        return threadPoolTaskExecutor;
     }
 
 }

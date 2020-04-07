@@ -42,17 +42,13 @@ public class CardPaymentService {
     }
 
     private void requestPay(CardPaymentEvent paymentEvent) {
-        if (isMaximumTry(paymentEvent)) {
+        if (paymentEvent.isMaximumTry()) {
             log.info("카드결제시도 횟수를 초과하여 실패내역 기록합니다: {}", paymentEvent.toString());
             recordFailToCardPayment(paymentEvent);
             return;
         }
         log.info("카드결제 이벤트큐에 다시 삽입: {}", paymentEvent.toString());
         eventBroker.offer(paymentEvent);
-    }
-
-    private boolean isMaximumTry(CardPaymentEvent paymentEvent) {
-        return paymentEvent.isMaximumTry();
     }
 
     private void recordFailToCardPayment(CardPaymentEvent paymentEvent) {

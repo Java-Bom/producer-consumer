@@ -33,7 +33,7 @@ class PayConsumerTest {
     @DisplayName("이벤트 소비자는 그룹에 들어있는 이벤트 큐만큼 스레드를 생성해 이벤트를 소비한다")
     void consume() throws InterruptedException {
         //given
-        CountDownLatch latch = new CountDownLatch(2);
+        CountDownLatch latch = new CountDownLatch(4);
         Map<String, Integer> hitMap = hitMap();
 
         CardPayEvent cardPayEvent = CardPayEvent.builder()
@@ -48,20 +48,51 @@ class PayConsumerTest {
                 .consumer(cashConsumer(hitMap, latch))
                 .build();
 
+        CashPayEvent cashPayEvent2 = CashPayEvent.builder()
+                .consumer(cashConsumer(hitMap, latch))
+                .build();
+
+
         PayBrokerGroup payBrokerGroup = new PayBrokerGroup();
 
         payBrokerGroup.put(CardPayEvent.class, cardPayEvent);
         payBrokerGroup.put(CardPayEvent.class, cardPayEvent2);
         payBrokerGroup.put(CashPayEvent.class, cashPayEvent);
+        payBrokerGroup.put(CashPayEvent.class, cashPayEvent2);
         //when
         //이벤트 수행
-        consumer = new PayConsumer(payBrokerGroup);
+        consumer = new PayConsumer(payBrokerGroup, null);
         latch.await();
 
         //then
-        assertThat(hitMap.get("thread_" + CARD.getEventClass().getSimpleName())).isEqualTo(1);
-        assertThat(hitMap.get("thread_" + CASH.getEventClass().getSimpleName())).isEqualTo(1);
+        assertThat(hitMap.get("thread_" + CARD.getEventClass().getSimpleName())).isEqualTo(2);
+        assertThat(hitMap.get("thread_" + CASH.getEventClass().getSimpleName())).isEqualTo(2);
     }
+
+
+    @Test
+    @DisplayName("이벤트를 3번이하 실패했을때는 다시 큐에 넣어준다.")
+    void consume2() throws InterruptedException {
+        //given
+        CountDownLatch latch = new CountDownLatch(1);
+
+        CardPayEvent cardPayEvent = CardPayEvent.builder()
+                .consumer(failConsumer(latch))
+                .build();
+
+        PayBrokerGroup payBrokerGroup = new PayBrokerGroup();
+
+        payBrokerGroup.put(CardPayEvent.class, cardPayEvent);
+
+        //when
+        //이벤트 수행
+        consumer = new PayConsumer(payBrokerGroup, null);
+        latch.await();
+
+        //then
+        assertThat(payBrokerGroup.pop(CardPayEvent.class).get().getTryCount()).isEqualTo(1);
+    }
+
 
     private Consumer<CardPayEvent> cardConsumer(Map<String, Integer> hitMap, CountDownLatch latch) {
         return (cardPayEvent) -> {
@@ -76,6 +107,13 @@ class PayConsumerTest {
             Integer count = hitMap.get(Thread.currentThread().getName());
             hitMap.put(Thread.currentThread().getName(), count + 1);
             latch.countDown();
+        };
+    }
+
+    private Consumer<CardPayEvent> failConsumer(CountDownLatch latch) {
+        return (cashPayEvent) -> {
+            latch.countDown();
+            throw new RuntimeException();
         };
     }
 

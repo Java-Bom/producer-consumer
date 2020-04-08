@@ -1,5 +1,6 @@
 package com.javabom.producerconsumer.event;
 
+import com.javabom.producerconsumer.domain.FailRequest;
 import com.javabom.producerconsumer.event.message.PayEvent;
 import com.javabom.producerconsumer.event.process.PayRequestBroker;
 import org.junit.jupiter.api.DisplayName;
@@ -31,7 +32,7 @@ class PayRequestBrokerTest {
     }
 
 
-    static class TestEvent implements PayEvent {
+    static class TestEvent extends PayEvent {
         private Integer id;
 
         public TestEvent(Integer id) {
@@ -49,6 +50,11 @@ class PayRequestBrokerTest {
 
         @Override
         public void consume() {
+        }
+
+        @Override
+        public FailRequest toFail() {
+            return null;
         }
     }
 }

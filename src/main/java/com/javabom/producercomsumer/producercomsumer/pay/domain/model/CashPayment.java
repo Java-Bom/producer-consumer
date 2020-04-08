@@ -1,27 +1,27 @@
-package com.javabom.producercomsumer.producercomsumer.pay.domain;
+package com.javabom.producercomsumer.producercomsumer.pay.domain.model;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Entity;
+
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChargeEvent implements Event {
-
+public class CashPayment extends Payment {
     private String name;
     private int money;
-    private String description;
 
-    public ChargeEvent(String name, int money, String description) {
+    public CashPayment(String name, int money) {
         this.name = name;
         this.money = money;
-        this.description = description;
     }
 
     @Override
     public void comma() {
-        System.out.println(name + "," + money + "," + description);
+        System.out.println(name + "," + money);
     }
 }

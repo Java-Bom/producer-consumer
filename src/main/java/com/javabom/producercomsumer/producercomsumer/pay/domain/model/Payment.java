@@ -26,7 +26,4 @@ public class Payment {
         this.id = id;
     }
 
-    void comma() {
-
-    }
 }

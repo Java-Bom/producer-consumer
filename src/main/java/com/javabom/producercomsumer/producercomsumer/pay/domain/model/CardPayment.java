@@ -22,7 +22,10 @@ public class CardPayment extends Payment {
     }
 
     @Override
-    public void comma() {
-        System.out.println(cardName + "," + money);
+    public String toString() {
+        return "CardPayment{" +
+                "cardName='" + cardName + '\'' +
+                ", money=" + money +
+                '}';
     }
 }

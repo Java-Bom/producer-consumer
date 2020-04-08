@@ -21,7 +21,10 @@ public class CashPayment extends Payment {
     }
 
     @Override
-    public void comma() {
-        System.out.println(name + "," + money);
+    public String toString() {
+        return "CashPayment{" +
+                "name='" + name + '\'' +
+                ", money=" + money +
+                '}';
     }
 }

@@ -20,7 +20,7 @@ class PaymentEventConsumerTest {
     @Test
     void run() throws InterruptedException {
         //given
-        Map<String, Integer> hitMap = new Hashtable<>();
+        Map<String, Integer> hitTable = new Hashtable<>();
         PaymentEventConsumerConfiguration paymentEventConsumerConfiguration = new PaymentEventConsumerConfiguration();
         PaymentEventConsumer<CardEvent> cardEventPaymentEventConsumer = paymentEventConsumerConfiguration.cardEventConsumer();
         PaymentEventConsumer<CashEvent> cashEventPaymentEventConsumer = paymentEventConsumerConfiguration.cashEventConsumer();
@@ -30,19 +30,19 @@ class PaymentEventConsumerTest {
         PaymentEvent event1 = CardEvent.builder()
                 .cardName("카카오뱅크")
                 .money(10)
-                .consumer(event -> hit(hitMap, countDownLatch)).build();
+                .consumer(event -> hit(hitTable, countDownLatch)).build();
         PaymentEvent event2 = CardEvent.builder()
                 .cardName("카카오뱅크")
                 .money(10)
-                .consumer(event -> hit(hitMap, countDownLatch)).build();
+                .consumer(event -> hit(hitTable, countDownLatch)).build();
         PaymentEvent event3 = CashEvent.builder()
                 .name("박찬인")
                 .money(10)
-                .consumer(event -> hit(hitMap, countDownLatch)).build();
+                .consumer(event -> hit(hitTable, countDownLatch)).build();
         PaymentEvent event4 = CashEvent.builder()
                 .name("박찬인")
                 .money(10)
-                .consumer(event -> hit(hitMap, countDownLatch)).build();
+                .consumer(event -> hit(hitTable, countDownLatch)).build();
 
         //when
         PaymentEventBroker<PaymentEvent> eventBroker1 = PaymentEventBrokerGroup.findByEvent(event1);
@@ -61,8 +61,8 @@ class PaymentEventConsumerTest {
         cashEventPaymentEventConsumer.stop();
 
         //then
-        assertThat(hitMap.isEmpty()).isFalse();
-        assertThat(hitMap.keySet()).hasSize(2);
+        assertThat(hitTable.isEmpty()).isFalse();
+        assertThat(hitTable.keySet()).hasSize(2);
     }
 
     private void hit(Map<String, Integer> hitMap, CountDownLatch countDownLatch) {

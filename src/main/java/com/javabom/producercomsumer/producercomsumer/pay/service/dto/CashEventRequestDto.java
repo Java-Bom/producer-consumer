@@ -10,13 +10,12 @@ import java.util.function.Consumer;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CashEventRequestDto implements PaymentEventRequestDto {
+public class CashEventRequestDto extends PaymentEventRequestDto {
     private String name;
-    private int money;
 
-    public CashEventRequestDto(String name, int money) {
+    public CashEventRequestDto(int money, String name) {
+        super(money);
         this.name = name;
-        this.money = money;
     }
 
     @Override

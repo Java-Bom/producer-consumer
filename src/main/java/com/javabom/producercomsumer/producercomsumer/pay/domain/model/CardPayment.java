@@ -13,7 +13,6 @@ import javax.persistence.Entity;
 public class CardPayment extends Payment {
 
     private String cardName;
-    private int money;
 
     @Builder
     public CardPayment(String cardName, int money) {

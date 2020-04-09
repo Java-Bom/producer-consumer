@@ -17,10 +17,16 @@ import javax.persistence.InheritanceType;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Payment {
+public abstract class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    protected int money;
+
+    public Payment(int money) {
+        this.money = money;
+    }
 
     public Payment(Long id) {
         this.id = id;

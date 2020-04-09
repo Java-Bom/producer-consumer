@@ -12,7 +12,6 @@ import javax.persistence.Entity;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CashPayment extends Payment {
     private String name;
-    private int money;
 
     @Builder
     public CashPayment(String name, int money) {

@@ -1,0 +1,5 @@
+package com.javabom.producercomsumer.producercomsumer.event;
+
+public interface PayEvent {
+    void consume();
+}

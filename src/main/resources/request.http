@@ -1,0 +1,38 @@
+POST http://localhost:8080/cash
+Content-Type: application/json
+
+{
+  "name": "감자",
+  "amount": 12000
+}
+
+###
+
+POST http://localhost:8080/card
+Content-Type: application/json
+
+{
+  "cardCompany": "기업",
+  "amount": 12000
+}
+
+###
+POST http://localhost:8080/cash
+Content-Type: application/json
+
+{
+  "name": "토마토",
+  "amount": 9000
+}
+
+###
+
+POST http://localhost:8080/card
+Content-Type: application/json
+
+{
+  "cardCompany": "신한",
+  "amount": 10000
+}
+
+###

@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Getter
-public class CashPaymentEvent implements PaymentEvent {
+public class CashPayEvent implements PaymentEvent {
 
     private static final String EVENT_NAME = "현금결제이벤트";
     public static final int MAXIMUM_TRYCOUNT = 2;
@@ -14,7 +14,7 @@ public class CashPaymentEvent implements PaymentEvent {
     private final CashPaymentRequestDto cashPaymentRequestDto;
     private int tryCount;
 
-    public CashPaymentEvent(CashPaymentRequestDto cashPaymentRequestDto) {
+    public CashPayEvent(CashPaymentRequestDto cashPaymentRequestDto) {
         this.cashPaymentRequestDto = cashPaymentRequestDto;
     }
 

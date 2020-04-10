@@ -1,9 +1,9 @@
 package com.javabom.producercomsumer.producercomsumer.config;
 
 import com.javabom.producercomsumer.producercomsumer.consumer.BankConsumer;
-import com.javabom.producercomsumer.producercomsumer.event.CardPaymentEvent;
-import com.javabom.producercomsumer.producercomsumer.event.CashPaymentEvent;
-import com.javabom.producercomsumer.producercomsumer.event.EventBroker;
+import com.javabom.producercomsumer.producercomsumer.event.CardPayEvent;
+import com.javabom.producercomsumer.producercomsumer.event.CashPayEvent;
+import com.javabom.producercomsumer.producercomsumer.event.EventBrokerGroup;
 import com.javabom.producercomsumer.producercomsumer.service.CardPaymentService;
 import com.javabom.producercomsumer.producercomsumer.service.CashPaymentService;
 import org.springframework.context.annotation.Bean;
@@ -14,23 +14,13 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 public class DefaultConfig {
 
     @Bean
-    public EventBroker<CardPaymentEvent> chargeEventBroker() {
-        return new EventBroker<>();
+    public BankConsumer<CardPayEvent> chargeEventConsumer(CardPaymentService cardPaymentService, ThreadPoolTaskExecutor cardPayThreadPool) {
+        return new BankConsumer<>(EventBrokerGroup.findByPayEvent(CardPayEvent.class), cardPaymentService::pay, cardPayThreadPool);
     }
 
     @Bean
-    public EventBroker<CashPaymentEvent> payEventBroker() {
-        return new EventBroker<>();
-    }
-
-    @Bean
-    public BankConsumer<CardPaymentEvent> chargeEventConsumer(EventBroker<CardPaymentEvent> chargeEventBroker, CardPaymentService cardPaymentService, ThreadPoolTaskExecutor cardPayThreadPool) {
-        return new BankConsumer<>(chargeEventBroker, cardPaymentService::pay, cardPayThreadPool);
-    }
-
-    @Bean
-    public BankConsumer<CashPaymentEvent> payEventConsumer(EventBroker<CashPaymentEvent> payEventBroker, CashPaymentService cashPaymentService, ThreadPoolTaskExecutor cashPayThreadPool) {
-        return new BankConsumer<>(payEventBroker, cashPaymentService::pay, cashPayThreadPool);
+    public BankConsumer<CashPayEvent> payEventConsumer(CashPaymentService cashPaymentService, ThreadPoolTaskExecutor cashPayThreadPool) {
+        return new BankConsumer<>(EventBrokerGroup.findByPayEvent(CashPayEvent.class), cashPaymentService::pay, cashPayThreadPool);
     }
 
 

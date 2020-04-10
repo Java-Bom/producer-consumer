@@ -13,18 +13,17 @@ public class BankConsumer<T extends PaymentEvent> {
 
     private final EventBroker<T> eventBroker;
     private final Consumer<T> consumer;
-    private final ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     public BankConsumer(EventBroker<T> eventBroker, Consumer<T> consumer, ThreadPoolTaskExecutor threadPoolTaskExecutor) {
         this.eventBroker = eventBroker;
         this.consumer = consumer;
-        this.threadPoolTaskExecutor = threadPoolTaskExecutor;
         threadPoolTaskExecutor.execute(this::consume);
     }
 
     private void consume() {
         while (true) {
             try {
+                log.info("Start: {}", Thread.currentThread().getName());
                 T paymentEvent = this.eventBroker.poll();
                 this.consumer.accept(paymentEvent);
             } catch (InterruptedException e) {

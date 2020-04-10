@@ -1,4 +1,4 @@
-package com.javabom.producercomsumer.producercomsumer.support;
+package com.javabom.producercomsumer.producercomsumer.vendor;
 
 import com.javabom.producercomsumer.producercomsumer.event.PaymentEvent;
 

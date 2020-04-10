@@ -3,10 +3,10 @@ package com.javabom.producercomsumer.producercomsumer.service;
 import com.javabom.producercomsumer.producercomsumer.domain.Account;
 import com.javabom.producercomsumer.producercomsumer.domain.AccountRepository;
 import com.javabom.producercomsumer.producercomsumer.dto.CashPaymentRequestDto;
-import com.javabom.producercomsumer.producercomsumer.event.CashPaymentEvent;
-import com.javabom.producercomsumer.producercomsumer.event.EventBroker;
+import com.javabom.producercomsumer.producercomsumer.event.CashPayEvent;
+import com.javabom.producercomsumer.producercomsumer.event.EventBrokerGroup;
 import com.javabom.producercomsumer.producercomsumer.service.exception.PayFailException;
-import com.javabom.producercomsumer.producercomsumer.support.PayVendor;
+import com.javabom.producercomsumer.producercomsumer.vendor.PayVendor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,16 +17,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class CashPaymentService {
 
-    private final EventBroker<CashPaymentEvent> eventBroker;
     private final AccountRepository accountRepository;
     private final PayVendor cashPayVendor;
 
     public void requestPay(final CashPaymentRequestDto cashPaymentRequestDto) {
-        eventBroker.offer(new CashPaymentEvent(cashPaymentRequestDto));
+        EventBrokerGroup.findByPayEvent(CashPayEvent.class).offer(new CashPayEvent(cashPaymentRequestDto));
     }
 
     @Transactional
-    public void pay(final CashPaymentEvent paymentEvent) {
+    public void pay(final CashPayEvent paymentEvent) {
         try {
             cashPayVendor.requestPayToVendor(paymentEvent);
         } catch (PayFailException payFailException) {
@@ -39,15 +38,15 @@ public class CashPaymentService {
         account.cashPay(paymentEvent.getCashPaymentRequestDto(), true);
     }
 
-    private void requestPay(CashPaymentEvent paymentEvent) {
+    private void requestPay(CashPayEvent paymentEvent) {
         if (paymentEvent.isMaximumTry()) {
             recordFailToCashPayment(paymentEvent);
             return;
         }
-        eventBroker.offer(paymentEvent);
+        EventBrokerGroup.findByPayEvent(CashPayEvent.class).offer(paymentEvent);
     }
 
-    private void recordFailToCashPayment(CashPaymentEvent paymentEvent) {
+    private void recordFailToCashPayment(CashPayEvent paymentEvent) {
         Account account = accountRepository.findAccountByUserId(paymentEvent.getCashPaymentRequestDto().getUserId())
                 .orElseThrow(IllegalArgumentException::new);
         account.cashPay(paymentEvent.getCashPaymentRequestDto(), false);

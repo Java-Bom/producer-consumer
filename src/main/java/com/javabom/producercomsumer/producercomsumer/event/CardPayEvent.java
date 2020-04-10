@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Getter
-public class CardPaymentEvent implements PaymentEvent {
+public class CardPayEvent implements PaymentEvent {
 
     private static final String EVENT_NAME = "카드결제이벤트";
     public static final int MAXIMUM_TRY_COUNT = 3;
@@ -14,7 +14,7 @@ public class CardPaymentEvent implements PaymentEvent {
     private final CardPaymentRequestDto cardPaymentRequestDto;
     private int tryCount;
 
-    public CardPaymentEvent(CardPaymentRequestDto cardPaymentRequestDto) {
+    public CardPayEvent(CardPaymentRequestDto cardPaymentRequestDto) {
         this.cardPaymentRequestDto = cardPaymentRequestDto;
     }
 

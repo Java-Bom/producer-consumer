@@ -1,5 +1,7 @@
 # producer-consumer
 
+문제는 각자의 브랜치로 
+
 
 ## 요구사항
 

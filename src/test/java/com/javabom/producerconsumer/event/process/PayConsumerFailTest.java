@@ -17,13 +17,6 @@ class PayConsumerFailTest {
 
     private PayConsumer consumer;
 
-    private static Consumer<CardPayEvent> failCardConsumer(CountDownLatch latch) {
-        return (cashPayEvent) -> {
-            latch.countDown();
-            throw new RuntimeException();
-        };
-    }
-
     @AfterEach
     void tearDown() {
         consumer.stop();
@@ -78,6 +71,13 @@ class PayConsumerFailTest {
         //then
         assertThat(payBrokerGroup.pop(CashPayEvent.class).isPresent()).isFalse();
         assertThat(cashPayEvent.getTryCount()).isEqualTo(2);
+    }
+
+    private static Consumer<CardPayEvent> failCardConsumer(CountDownLatch latch) {
+        return (cashPayEvent) -> {
+            latch.countDown();
+            throw new RuntimeException();
+        };
     }
 
     private Consumer<CashPayEvent> failCashConsumer(CountDownLatch latch) {

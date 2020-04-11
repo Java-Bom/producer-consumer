@@ -63,8 +63,8 @@ class PayConsumerTest {
         latch.await();
 
         //then
-        assertThat(hitMap.get("thread_" + CARD.getEventClass().getSimpleName())).isEqualTo(2);
-        assertThat(hitMap.get("thread_" + CASH.getEventClass().getSimpleName())).isEqualTo(2);
+        assertThat(hitMap.get("thread_" + CARD.getEventClass().getSimpleName() + "1")).isEqualTo(2);
+        assertThat(hitMap.get("thread_" + CASH.getEventClass().getSimpleName() + "1")).isEqualTo(2);
     }
 
 
@@ -88,7 +88,7 @@ class PayConsumerTest {
     private Map<String, Integer> hitMap() {
         Map<String, Integer> hitMap = new HashMap<>();
         for (PayType type : PayType.values()) {
-            hitMap.put("thread_" + type.getEventClass().getSimpleName(), 0);
+            hitMap.put("thread_" + type.getEventClass().getSimpleName() + "1", 0);
         }
         return hitMap;
     }

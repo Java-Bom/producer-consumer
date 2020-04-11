@@ -1,13 +1,18 @@
 package com.javabom.producerconsumer.event.process;
 
 import com.javabom.producerconsumer.event.message.PayEvent;
+import com.javabom.producerconsumer.event.message.PayType;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
-
+@Slf4j
 // TODO: 2020. 3. 23. 동기화
 public class PayConsumer {
     private final PayBrokerGroup payBrokerGroup;
+    private final Map<Class<? extends PayEvent>, PayThreadPoolExecutor> threadPoolTaskExecutorMap = new HashMap<>();
 
     private boolean running = true;
 
@@ -16,6 +21,7 @@ public class PayConsumer {
         for (Class<? extends PayEvent> eventClass : payBrokerGroup.keySet()) {
             Thread thread = new Thread(() -> consume(eventClass));
             thread.setName("thread_" + eventClass.getSimpleName());
+            threadPoolTaskExecutorMap.put(eventClass, new PayThreadPoolExecutor(PayType.findBy(eventClass)));
             thread.start();
         }
     }
@@ -24,10 +30,9 @@ public class PayConsumer {
         while (running) {
             Optional<? extends PayEvent> maybeEvent = payBrokerGroup.pop(eventClass);
             if (!maybeEvent.isPresent()) {
-                return;
+                continue;
             }
-
-            pay(eventClass, maybeEvent.get());
+            threadPoolTaskExecutorMap.get(eventClass).executeJob(() -> pay(eventClass, maybeEvent.get()));
         }
     }
 
@@ -35,6 +40,7 @@ public class PayConsumer {
         try {
             payEvent.consume();
         } catch (Exception e) {
+            log.warn(e.getMessage());
             retry(eventClass, payEvent);
         }
     }
@@ -44,6 +50,7 @@ public class PayConsumer {
             payBrokerGroup.put(eventClass, eventClass.cast(payEvent));
             return;
         }
+
         payEvent.consumeFail();
     }
 

@@ -1,25 +1,40 @@
 package com.javabom.producerconsumer.event.message;
 
 import com.javabom.producerconsumer.domain.FailRequest;
-import com.javabom.producerconsumer.exception.FailRequestException;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.util.function.Consumer;
+
+@Getter
+@NoArgsConstructor
 public abstract class PayEvent {
-    private static final int MAX_TRY_COUNT = 3;
+    private static final int DEFAULT_MAX_TRY_COUNT = 3;
 
-    @Getter
-    private int tryCount;
+    protected int tryCount;
+    protected Consumer<PayEvent> failConsumer;
+
+    public PayEvent(Consumer<PayEvent> failConsumer) {
+        this.failConsumer = failConsumer;
+    }
+
+
+    public void consume() {
+        tryCount++;
+        pay();
+    }
+
+    public void consumeFail() {
+        failConsumer.accept(this);
+    }
+
+    public boolean isEnableRetry() {
+        return tryCount != DEFAULT_MAX_TRY_COUNT;
+    }
 
     public abstract String comma();
 
-    public abstract void consume();
-
     public abstract FailRequest toFail();
 
-    public void tryPay() {
-        if (tryCount == MAX_TRY_COUNT) {
-            throw new FailRequestException();
-        }
-        tryCount++;
-    }
+    protected abstract void pay();
 }

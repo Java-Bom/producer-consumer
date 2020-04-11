@@ -1,8 +1,6 @@
 package com.javabom.producerconsumer.event.process;
 
-import com.javabom.producerconsumer.domain.FailRequestRepository;
 import com.javabom.producerconsumer.event.message.PayEvent;
-import com.javabom.producerconsumer.exception.FailRequestException;
 
 import java.util.Optional;
 
@@ -10,13 +8,11 @@ import java.util.Optional;
 // TODO: 2020. 3. 23. 동기화
 public class PayConsumer {
     private final PayBrokerGroup payBrokerGroup;
-    private final FailRequestRepository failRequestRepository;
 
     private boolean running = true;
 
-    public PayConsumer(PayBrokerGroup payBrokerGroup, FailRequestRepository failRequestRepository) {
+    public PayConsumer(PayBrokerGroup payBrokerGroup) {
         this.payBrokerGroup = payBrokerGroup;
-        this.failRequestRepository = failRequestRepository;
         for (Class<? extends PayEvent> eventClass : payBrokerGroup.keySet()) {
             Thread thread = new Thread(() -> consume(eventClass));
             thread.setName("thread_" + eventClass.getSimpleName());
@@ -37,17 +33,21 @@ public class PayConsumer {
 
     private <E extends PayEvent> void pay(Class<E> eventClass, PayEvent payEvent) {
         try {
-            payEvent.tryPay();
             payEvent.consume();
-        } catch (FailRequestException e) {
-            failRequestRepository.save(payEvent.toFail());
         } catch (Exception e) {
-            payBrokerGroup.put(eventClass, eventClass.cast(payEvent));
+            retry(eventClass, payEvent);
         }
+    }
+
+    private <E extends PayEvent> void retry(Class<E> eventClass, PayEvent payEvent) {
+        if (payEvent.isEnableRetry()) {
+            payBrokerGroup.put(eventClass, eventClass.cast(payEvent));
+            return;
+        }
+        payEvent.consumeFail();
     }
 
     public void stop() {
         this.running = false;
     }
-
 }

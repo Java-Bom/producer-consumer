@@ -1,10 +1,8 @@
-package com.javabom.producerconsumer.event;
+package com.javabom.producerconsumer.event.process;
 
 import com.javabom.producerconsumer.event.message.CardPayEvent;
 import com.javabom.producerconsumer.event.message.CashPayEvent;
 import com.javabom.producerconsumer.event.message.PayType;
-import com.javabom.producerconsumer.event.process.PayBrokerGroup;
-import com.javabom.producerconsumer.event.process.PayConsumer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -61,36 +59,12 @@ class PayConsumerTest {
         payBrokerGroup.put(CashPayEvent.class, cashPayEvent2);
         //when
         //이벤트 수행
-        consumer = new PayConsumer(payBrokerGroup, null);
+        consumer = new PayConsumer(payBrokerGroup);
         latch.await();
 
         //then
         assertThat(hitMap.get("thread_" + CARD.getEventClass().getSimpleName())).isEqualTo(2);
         assertThat(hitMap.get("thread_" + CASH.getEventClass().getSimpleName())).isEqualTo(2);
-    }
-
-
-    @Test
-    @DisplayName("이벤트를 3번이하 실패했을때는 다시 큐에 넣어준다.")
-    void consume2() throws InterruptedException {
-        //given
-        CountDownLatch latch = new CountDownLatch(1);
-
-        CardPayEvent cardPayEvent = CardPayEvent.builder()
-                .consumer(failConsumer(latch))
-                .build();
-
-        PayBrokerGroup payBrokerGroup = new PayBrokerGroup();
-
-        payBrokerGroup.put(CardPayEvent.class, cardPayEvent);
-
-        //when
-        //이벤트 수행
-        consumer = new PayConsumer(payBrokerGroup, null);
-        latch.await();
-
-        //then
-        assertThat(payBrokerGroup.pop(CardPayEvent.class).get().getTryCount()).isEqualTo(1);
     }
 
 
@@ -110,12 +84,6 @@ class PayConsumerTest {
         };
     }
 
-    private Consumer<CardPayEvent> failConsumer(CountDownLatch latch) {
-        return (cashPayEvent) -> {
-            latch.countDown();
-            throw new RuntimeException();
-        };
-    }
 
     private Map<String, Integer> hitMap() {
         Map<String, Integer> hitMap = new HashMap<>();
@@ -124,6 +92,5 @@ class PayConsumerTest {
         }
         return hitMap;
     }
-
 
 }

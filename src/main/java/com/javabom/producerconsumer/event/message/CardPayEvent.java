@@ -3,19 +3,19 @@ package com.javabom.producerconsumer.event.message;
 import com.javabom.producerconsumer.domain.FailRequest;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.function.Consumer;
 
 @Getter
-@NoArgsConstructor
-public class CardPayEvent extends PayEvent {
+public final class CardPayEvent extends PayEvent {
+    private static final int MAX_TRY_COUNT = 3;
     private Long amount;
     private String cardCompany;
     private Consumer<CardPayEvent> consumer;
 
     @Builder
-    private CardPayEvent(Long amount, String cardCompany, Consumer<CardPayEvent> consumer) {
+    private CardPayEvent(Long amount, String cardCompany, Consumer<CardPayEvent> consumer, Consumer<PayEvent> failConsumer) {
+        super(failConsumer);
         this.amount = amount;
         this.cardCompany = cardCompany;
         this.consumer = consumer;
@@ -27,12 +27,12 @@ public class CardPayEvent extends PayEvent {
     }
 
     @Override
-    public void consume() {
-        consumer.accept(this);
+    public FailRequest toFail() {
+        return new FailRequest(PayType.CARD);
     }
 
     @Override
-    public FailRequest toFail() {
-        return new FailRequest(PayType.CARD);
+    protected void pay() {
+        consumer.accept(this);
     }
 }

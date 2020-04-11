@@ -49,12 +49,13 @@ class PayRequestBrokerTest {
         }
 
         @Override
-        public void consume() {
+        public FailRequest toFail() {
+            return null;
         }
 
         @Override
-        public FailRequest toFail() {
-            return null;
+        protected void pay() {
+
         }
     }
 }

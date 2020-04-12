@@ -14,13 +14,13 @@ public class PaymentEventConsumerConfiguration {
     @Bean
     public PaymentEventConsumer<CardEvent> cardEventConsumer() {
         log.info("cardEventConsumer bean created.");
-        return new PaymentEventConsumer<>(PaymentEventBrokerGroup.CARD.getPaymentEventBroker());
+        return new PaymentEventConsumer<>(PaymentEventBrokerGroup.CARD.getPaymentEventBroker(), "CARD");
     }
 
     @Bean
     public PaymentEventConsumer<CashEvent> cashEventConsumer() {
         log.info("cashEventConsumer bean created.");
-        return new PaymentEventConsumer<>(PaymentEventBrokerGroup.CASH.getPaymentEventBroker());
+        return new PaymentEventConsumer<>(PaymentEventBrokerGroup.CASH.getPaymentEventBroker(), "CASH");
     }
 
 }

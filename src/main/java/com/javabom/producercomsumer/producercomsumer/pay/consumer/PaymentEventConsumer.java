@@ -10,10 +10,10 @@ public class PaymentEventConsumer<E extends PaymentEvent> implements Runnable {
     private final PaymentEventBroker<E> paymentEventBroker;
     private boolean runnable = true;
 
-    public PaymentEventConsumer(PaymentEventBroker<E> paymentEventBroker) {
+    public PaymentEventConsumer(PaymentEventBroker<E> paymentEventBroker, String name) {
         this.paymentEventBroker = paymentEventBroker;
 
-        new Thread(this).start();
+        new Thread(this, name).start();
     }
 
     @Override

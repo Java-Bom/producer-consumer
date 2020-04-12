@@ -8,7 +8,7 @@ import com.javabom.producercomsumer.producercomsumer.pay.domain.event.PaymentEve
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
@@ -20,7 +20,10 @@ class PaymentEventConsumerTest {
     @Test
     void run() throws InterruptedException {
         //given
-        Map<String, Integer> hitTable = new Hashtable<>();
+        Map<String, Integer> hitTable = new HashMap<>();
+        hitTable.put("CASH", 0);
+        hitTable.put("CARD", 0);
+
         PaymentEventConsumerConfiguration paymentEventConsumerConfiguration = new PaymentEventConsumerConfiguration();
         PaymentEventConsumer<CardEvent> cardEventPaymentEventConsumer = paymentEventConsumerConfiguration.cardEventConsumer();
         PaymentEventConsumer<CashEvent> cashEventPaymentEventConsumer = paymentEventConsumerConfiguration.cashEventConsumer();
@@ -56,18 +59,18 @@ class PaymentEventConsumerTest {
         eventBroker4.add(event4);
 
         countDownLatch.await();
-
         cardEventPaymentEventConsumer.stop();
         cashEventPaymentEventConsumer.stop();
 
         //then
         assertThat(hitTable.isEmpty()).isFalse();
-        assertThat(hitTable.keySet()).hasSize(2);
+        assertThat(hitTable.get("CARD")).isEqualTo(2);
+        assertThat(hitTable.get("CASH")).isEqualTo(2);
     }
 
     private void hit(Map<String, Integer> hitMap, CountDownLatch countDownLatch) {
         String name = Thread.currentThread().getName();
-        int nowCount = hitMap.getOrDefault(name, 0);
+        int nowCount = hitMap.get(name);
 
         hitMap.put(name, nowCount + 1);
 

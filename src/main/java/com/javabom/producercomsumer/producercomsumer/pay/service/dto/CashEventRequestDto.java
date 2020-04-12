@@ -10,16 +10,16 @@ import java.util.function.Consumer;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CashEventRequestDto extends PaymentEventRequestDto {
+public class CashEventRequestDto {
+    private int money;
     private String name;
 
     public CashEventRequestDto(int money, String name) {
-        super(money);
+        this.money = money;
         this.name = name;
     }
 
-    @Override
-    public PaymentEvent toEvent(Consumer<PaymentEvent> consumer) {
+    public PaymentEvent toEvent(Consumer<CashEvent> consumer) {
         return CashEvent.builder()
                 .name(this.name)
                 .money(this.money)

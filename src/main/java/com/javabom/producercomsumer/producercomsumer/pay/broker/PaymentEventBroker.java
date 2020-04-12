@@ -3,12 +3,12 @@ package com.javabom.producercomsumer.producercomsumer.pay.broker;
 import com.javabom.producercomsumer.producercomsumer.pay.domain.event.PaymentEvent;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 @Slf4j
 public class PaymentEventBroker<E extends PaymentEvent> {
-    private final Queue<E> eventQueue = new LinkedList<>();
+    private final BlockingQueue<E> eventQueue = new LinkedBlockingQueue<>();
     private final int limit;
 
     public PaymentEventBroker(int limit) {

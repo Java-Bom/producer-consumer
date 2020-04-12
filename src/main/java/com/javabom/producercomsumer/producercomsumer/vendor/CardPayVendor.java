@@ -12,6 +12,6 @@ public class CardPayVendor implements PayVendor<CardPayEvent> {
     public void requestPayToVendor(CardPayEvent paymentEvent) {
         log.info("벤더사로 카드 결제요쳥을 보냅니다 ... : {}", paymentEvent.toString());
         paymentEvent.run();
-        throw new PayFailException("Exception !!!");
+//        throw new PayFailException("Exception !!!");
     }
 }

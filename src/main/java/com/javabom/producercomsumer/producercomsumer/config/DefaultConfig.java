@@ -29,6 +29,7 @@ public class DefaultConfig {
         ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
         threadPoolTaskExecutor.setMaxPoolSize(100);
         threadPoolTaskExecutor.setCorePoolSize(5);
+        threadPoolTaskExecutor.setQueueCapacity(100); // 이만큼 늘어났을 때 스레드풀이 늘어난다.
         threadPoolTaskExecutor.setThreadGroupName("CARD PAYMENT THREAD");
         return threadPoolTaskExecutor;
     }

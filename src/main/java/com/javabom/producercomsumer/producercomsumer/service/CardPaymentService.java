@@ -28,16 +28,15 @@ public class CardPaymentService {
     public void pay(final CardPayEvent paymentEvent) {
         try {
             cardPayVendor.requestPayToVendor(paymentEvent);
+            Account account = accountRepository.findAccountByUserId(paymentEvent.getCardPaymentRequestDto().getUserId())
+                    .orElseThrow(IllegalArgumentException::new);
+            account.cardPay(paymentEvent.getCardPaymentRequestDto(), true);
+            throw new PayFailException("abdaas");
         } catch (PayFailException payFailException) {
             log.info("카드결제 처리 시 익셉션 발생: {} ", paymentEvent.toString());
             requestPay(paymentEvent);
-            return;
         }
-
-        Account account = accountRepository.findAccountByUserId(paymentEvent.getCardPaymentRequestDto().getUserId())
-                .orElseThrow(IllegalArgumentException::new);
-
-        account.cardPay(paymentEvent.getCardPaymentRequestDto(), true);
+        // 롤백이 안된다. @Transcational 에서 Try- catch 문을 돌리면 롤백안됨.
     }
 
     private void requestPay(CardPayEvent paymentEvent) {

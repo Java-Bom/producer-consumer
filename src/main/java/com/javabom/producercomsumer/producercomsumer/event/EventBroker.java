@@ -5,11 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 @Slf4j
 public class EventBroker<T extends PaymentEvent> {
     private static final int LIMIT_QUEUE_SIZE = 100;
-    private Queue<T> eventQueue = new LinkedList<>();
+    private Queue<T> eventQueue = new LinkedBlockingQueue<>(); // Event 유실, 동시에 같은 이벤트를 꺼낼 수 있기 떄문에 Blocking
 
     public void offer(T javabomEvent) {
         if (eventQueue.size() > LIMIT_QUEUE_SIZE) {

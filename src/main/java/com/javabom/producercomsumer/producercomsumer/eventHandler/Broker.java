@@ -1,12 +1,8 @@
-package com.javabom.producercomsumer.producercomsumer.event;
+package com.javabom.producercomsumer.producercomsumer.eventHandler;
 
-import com.javabom.producercomsumer.producercomsumer.domain.BankEvent;
-import com.javabom.producercomsumer.producercomsumer.domain.CashPayEvent;
-import com.javabom.producercomsumer.producercomsumer.dto.PayRequestDto;
+import com.javabom.producercomsumer.producercomsumer.event.BankEvent;
 import lombok.extern.slf4j.Slf4j;
 
-import java.lang.reflect.TypeVariable;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.stream.Collectors;

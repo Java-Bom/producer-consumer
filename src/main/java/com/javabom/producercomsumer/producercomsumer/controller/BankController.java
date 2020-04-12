@@ -3,7 +3,6 @@ package com.javabom.producercomsumer.producercomsumer.controller;
 import com.javabom.producercomsumer.producercomsumer.dto.CashPayRequestDto;
 import com.javabom.producercomsumer.producercomsumer.dto.CardPayRequestDto;
 import com.javabom.producercomsumer.producercomsumer.service.BankService;
-import com.javabom.producercomsumer.producercomsumer.event.EventConsumer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

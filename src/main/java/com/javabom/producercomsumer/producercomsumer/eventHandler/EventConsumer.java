@@ -1,7 +1,7 @@
-package com.javabom.producercomsumer.producercomsumer.event;
+package com.javabom.producercomsumer.producercomsumer.eventHandler;
 
-import com.javabom.producercomsumer.producercomsumer.domain.CardPayEvent;
-import com.javabom.producercomsumer.producercomsumer.domain.CashPayEvent;
+import com.javabom.producercomsumer.producercomsumer.event.CardPayEvent;
+import com.javabom.producercomsumer.producercomsumer.event.CashPayEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class EventConsumer {
 
-    private final BankEventConsumer<CardPayEvent<?>> cardPayEventBankEventConsumer;
-    private final BankEventConsumer<CashPayEvent<?>> cashPayEventBankEventConsumer;
+    private final BankEventConsumer<CardPayEvent> cardPayEventBankEventConsumer;
+    private final BankEventConsumer<CashPayEvent> cashPayEventBankEventConsumer;
 
     public void run(){
         new Thread(cardPayEventBankEventConsumer).start();

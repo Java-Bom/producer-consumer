@@ -1,4 +1,4 @@
-package com.javabom.producercomsumer.producercomsumer.domain;
+package com.javabom.producercomsumer.producercomsumer.event;
 
 /**
  * Created by jyami on 2020/03/21

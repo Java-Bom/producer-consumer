@@ -1,6 +1,6 @@
 package com.javabom.producercomsumer.producercomsumer.controller;
 
-import com.javabom.producercomsumer.producercomsumer.event.EventConsumer;
+import com.javabom.producercomsumer.producercomsumer.eventHandler.EventConsumer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

@@ -45,6 +45,11 @@ public class CardPaymentService {
             recordFailToCardPayment(paymentEvent);
             return;
         }
+
+        // consume 하는 스레드가 이벤트큐에 다시 삽입하는 것 까지 하게 되면, 이벤트 큐는 동기화처리 되어야한다.
+        // 그럼 이 스레드는 자신이 큐에 넣을 때까지 반환되지 못하기 때문에 놀고있는 스레드가 생기게되는 문제.
+        // 그렇다면? consume 하는 스레드는 consume 까지만 해야함. 에러가 생기면 에러만 던지고 바로 스레드풀로 돌아가야함.
+        // 그리고 그 에러를 처리하는 것은 메인스레드에서 해야겠지요?
         log.info("카드결제 이벤트큐에 다시 삽입: {}", paymentEvent.toString());
         EventBrokerGroup.findByPayEvent(CardPayEvent.class).offer(paymentEvent);
     }

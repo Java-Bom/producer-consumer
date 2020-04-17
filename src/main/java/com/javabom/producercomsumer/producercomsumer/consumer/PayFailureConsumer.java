@@ -25,17 +25,17 @@ public class PayFailureConsumer<T extends PayEvent> {
         while (true) {
             log.info("Pick Event: {}", Thread.currentThread().getName());
             try {
-                T paymentEvent = this.eventBroker.poll(); // 하나의 스레드가 이벤트를 계속 꺼낸다.
-                threadPoolExecutor.execute(() -> consume(paymentEvent)); // 그리고 스레드풀에서 스레드를 꺼내 소모하도록 한다.
+                T payEvent = this.eventBroker.poll(); // 하나의 스레드가 이벤트를 계속 꺼낸다.
+                threadPoolExecutor.execute(() -> consume(payEvent)); // 그리고 스레드풀에서 스레드를 꺼내 소모하도록 한다.
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void consume(T paymentEvent) {
-        log.info("Consume Event: {}", Thread.currentThread().getName());
-        this.consumer.accept(paymentEvent);
+    private void consume(T payEvent) {
+        log.info("실패이벤트를 소모합니다: {}", Thread.currentThread().getName());
+        this.consumer.accept(payEvent);
     }
 
 }

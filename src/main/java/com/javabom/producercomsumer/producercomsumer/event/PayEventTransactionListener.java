@@ -17,6 +17,7 @@ public class PayEventTransactionListener {
         if (!payEvent.isMaximumTry()) {
             log.info("이벤트큐에 재삽입: {}", Thread.currentThread().getName());
             EventBrokerGroup.findPayEventBroker(CardPayEvent.class).offer(payEvent);
+            return;
         }
         log.info("최대 시도횟수를 초과하여 실패내역을 큐에 삽입합니다: {}", Thread.currentThread().getName());
         EventBrokerGroup.findFailureEventBroker(CardPayEvent.class).offer(payEvent);
@@ -27,6 +28,7 @@ public class PayEventTransactionListener {
         if (!payEvent.isMaximumTry()) {
             log.info("이벤트큐에 재삽입: {}", payEvent);
             EventBrokerGroup.findPayEventBroker(CashPayEvent.class).offer(payEvent);
+            return;
         }
         log.info("최대 시도횟수를 초과하여 실패내역을 큐에 기록합니다.");
         EventBrokerGroup.findFailureEventBroker(CashPayEvent.class).offer(payEvent);

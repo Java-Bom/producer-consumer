@@ -35,8 +35,8 @@ Content-Type: application/json
 
 {
   "userId": "seojaeyeon",
-  "cardCompany": "신한",
-  "price": 12000
+  "cardCompany": "국민",
+  "price": 26000
 }
 
 ###
@@ -56,8 +56,8 @@ Content-Type: application/json
 
 {
   "userId": "seojaeyeon",
-  "cardCompany": "신한",
-  "price": 12000
+  "cardCompany": "우리",
+  "price": 17000
 }
 
 ###

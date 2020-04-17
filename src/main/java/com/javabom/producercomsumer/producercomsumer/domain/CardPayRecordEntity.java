@@ -1,8 +1,7 @@
 package com.javabom.producercomsumer.producercomsumer.domain;
 
-import com.javabom.producercomsumer.producercomsumer.dto.CashPaymentRequestDto;
+import com.javabom.producercomsumer.producercomsumer.dto.CardPaymentRequestDto;
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -10,25 +9,27 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
+@Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-@Entity
-public class CashPaymentRecordEntity {
+public class CardPayRecordEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @CreatedDate
-    private LocalDateTime cashPaymentLocalDateTime;
+    private LocalDateTime cardPaymentDateTime;
 
-    private String productName;
+    private String cardName;
+
+    private int price;
 
     private boolean complete;
 
-    public CashPaymentRecordEntity(CashPaymentRequestDto cashPaymentRequestDto, boolean complete) {
-        this.productName = cashPaymentRequestDto.getProductName();
+    public CardPayRecordEntity(CardPaymentRequestDto cardPaymentRequestDto, boolean complete) {
+        this.cardName = cardPaymentRequestDto.getCardCompany();
+        this.price = cardPaymentRequestDto.getPrice();
         this.complete = complete;
     }
 }

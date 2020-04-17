@@ -24,11 +24,11 @@ public class Account {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "ACCOUNT_ID")
-    private List<CardPaymentRecordEntity> cardPaymentHistories = new ArrayList<>();
+    private List<CardPayRecordEntity> cardPaymentHistories = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "ACCOUNT_ID")
-    private List<CashPaymentRecordEntity> cashPaymentHistories = new ArrayList<>();
+    private List<CashPayRecordEntity> cashPaymentHistories = new ArrayList<>();
 
     public Account(String userId) {
         this.userId = userId;
@@ -36,12 +36,12 @@ public class Account {
 
     public void cardPay(CardPaymentRequestDto cardPaymentRequestDto, boolean complete) {
         log.info("CardPay: {}, {}", cardPaymentRequestDto.getCardCompany(), cardPaymentRequestDto.getPrice());
-        this.cardPaymentHistories.add(new CardPaymentRecordEntity(cardPaymentRequestDto, complete));
+        this.cardPaymentHistories.add(new CardPayRecordEntity(cardPaymentRequestDto, complete));
     }
 
     public void cashPay(CashPaymentRequestDto cashPaymentRequestDto, boolean complete) {
         log.info("CashPay: {}, {}", cashPaymentRequestDto.getProductName(), cashPaymentRequestDto.getPrice());
-        this.cashPaymentHistories.add(new CashPaymentRecordEntity(cashPaymentRequestDto, complete));
+        this.cashPaymentHistories.add(new CashPayRecordEntity(cashPaymentRequestDto, complete));
     }
 
     public void clearCardPayHistories() {

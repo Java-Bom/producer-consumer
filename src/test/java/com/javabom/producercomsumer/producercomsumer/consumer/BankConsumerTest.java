@@ -5,7 +5,7 @@ import com.javabom.producercomsumer.producercomsumer.dto.CashPaymentRequestDto;
 import com.javabom.producercomsumer.producercomsumer.event.CardPayEvent;
 import com.javabom.producercomsumer.producercomsumer.event.CashPayEvent;
 import com.javabom.producercomsumer.producercomsumer.event.EventBroker;
-import com.javabom.producercomsumer.producercomsumer.event.PaymentEvent;
+import com.javabom.producercomsumer.producercomsumer.event.PayEvent;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -22,8 +22,8 @@ class BankConsumerTest {
     void consumer() throws InterruptedException {
         // given
         CountDownLatch countDownLatch = new CountDownLatch(2);
-        EventBroker<PaymentEvent> eventEventBroker = new EventBroker<>();
-        BankConsumer<PaymentEvent> bankConsumer = new BankConsumer<>(eventEventBroker, testConsume(countDownLatch), testThreadExecutor());
+        EventBroker<PayEvent> eventEventBroker = new EventBroker<>();
+        BankConsumer<PayEvent> bankConsumer = new BankConsumer<>(eventEventBroker, testConsume(countDownLatch), testThreadExecutor());
 
         //when
         eventEventBroker.offer(new CardPayEvent(new CardPaymentRequestDto()));
@@ -44,7 +44,7 @@ class BankConsumerTest {
         return threadPoolTaskExecutor;
     }
 
-    private Consumer<PaymentEvent> testConsume(CountDownLatch countDownLatch) {
+    private Consumer<PayEvent> testConsume(CountDownLatch countDownLatch) {
         return (testEvent1) -> {
             try {
                 Thread.sleep(500);

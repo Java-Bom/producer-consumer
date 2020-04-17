@@ -1,21 +1,19 @@
 package com.javabom.producercomsumer.producercomsumer.consumer;
 
-import com.javabom.producercomsumer.producercomsumer.event.EventBroker;
+import com.javabom.producercomsumer.producercomsumer.event.FailureEventBroker;
 import com.javabom.producercomsumer.producercomsumer.event.PayEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.function.Consumer;
 
-
 @Slf4j
-public class BankConsumer<T extends PayEvent> {
-
-    private final EventBroker<T> eventBroker;
+public class PayFailureConsumer<T extends PayEvent> {
+    private final FailureEventBroker<T> eventBroker;
     private final Consumer<T> consumer;
     private final ThreadPoolTaskExecutor threadPoolExecutor;
 
-    public BankConsumer(EventBroker<T> eventBroker, Consumer<T> consumer, ThreadPoolTaskExecutor threadPoolTaskExecutor) {
+    public PayFailureConsumer(FailureEventBroker<T> eventBroker, Consumer<T> consumer, ThreadPoolTaskExecutor threadPoolTaskExecutor) {
         this.eventBroker = eventBroker;
         this.consumer = consumer;
         this.threadPoolExecutor = threadPoolTaskExecutor;
@@ -39,4 +37,5 @@ public class BankConsumer<T extends PayEvent> {
         log.info("Consume Event: {}", Thread.currentThread().getName());
         this.consumer.accept(paymentEvent);
     }
+
 }

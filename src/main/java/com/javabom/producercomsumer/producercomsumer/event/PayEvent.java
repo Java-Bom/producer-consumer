@@ -1,6 +1,6 @@
 package com.javabom.producercomsumer.producercomsumer.event;
 
-public interface PaymentEvent {
+public interface PayEvent {
     void run();
 
     boolean isMaximumTry();

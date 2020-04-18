@@ -5,6 +5,7 @@ import com.javabom.producercomsumer.producercomsumer.dto.CardPayRequestDto;
 import com.javabom.producercomsumer.producercomsumer.event.CardPayEvent;
 import com.javabom.producercomsumer.producercomsumer.event.CashPayEvent;
 import com.javabom.producercomsumer.producercomsumer.eventHandler.Broker;
+import com.javabom.producercomsumer.producercomsumer.exception.EventFailException;
 import com.javabom.producercomsumer.producercomsumer.service.BankService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

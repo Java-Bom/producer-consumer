@@ -13,5 +13,6 @@ public abstract class BankEvent<E>{
     protected E requestDto;
     protected Consumer<E> payRecord;
     public abstract void consumeEvent();
+    public abstract String failEventMessage();
     public abstract String getEventContents();
 }

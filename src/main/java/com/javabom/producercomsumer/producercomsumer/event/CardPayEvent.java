@@ -25,9 +25,13 @@ public class CardPayEvent extends BankEvent<CardPayRequestDto> {
 
     @Override
     public void consumeEvent() {
-        log.info(requestDto.toString());
-        log.info("카드를 결제 했습니다  ◕ˇεˇ◕✿ ");
+        log.info("카드를 결제 했습니다  ◕ˇεˇ◕✿ :" + requestDto.toString());
         payRecord.accept(requestDto);
+    }
+
+    @Override
+    public String failEventMessage() {
+        return "카드결제요청을 실패했어요  ( Ĭ ^ Ĭ ) :" + requestDto.toString();
     }
 
     @Override

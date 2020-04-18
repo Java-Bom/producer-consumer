@@ -1,6 +1,7 @@
 package com.javabom.producercomsumer.producercomsumer.eventHandler;
 
 import com.javabom.producercomsumer.producercomsumer.event.BankEvent;
+import com.javabom.producercomsumer.producercomsumer.exception.EventFailException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.LinkedList;
@@ -14,12 +15,16 @@ import java.util.stream.Collectors;
 public class Broker<E extends BankEvent<?>> {
 
     private Queue<E> bankEventQueue;
+    private static final int MAX_EVENT_SIZE = 2;
 
     public Broker() {
         this.bankEventQueue = new LinkedList<>();
     }
 
     public void registerEvent(E javaBomBank) {
+        if(bankEventQueue.size() >= MAX_EVENT_SIZE){
+            throw new EventFailException(javaBomBank.failEventMessage());
+        }
         bankEventQueue.add(javaBomBank);
     }
 

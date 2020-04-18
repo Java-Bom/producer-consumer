@@ -22,9 +22,13 @@ public class CashPayEvent extends BankEvent<CashPayRequestDto> {
 
     @Override
     public void consumeEvent() {
-        log.info(requestDto.toString());
-        log.info("현금을 결제 했습니다  ◕ˇεˇ◕✿ ");
+        log.info("현금을 결제 했습니다  ◕ˇεˇ◕✿ :" + requestDto.toString());
         payRecord.accept(requestDto);
+    }
+
+    @Override
+    public String failEventMessage() {
+        return "현금결제요청을 실패했어요  ( Ĭ ^ Ĭ ) :" + requestDto.toString();
     }
 
     @Override

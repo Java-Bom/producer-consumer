@@ -11,16 +11,13 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class BankEventConsumer<T extends BankEvent<?>> implements Runnable {
 
-    private boolean nowRun = false;
     private final Broker<T> broker;
 
     @Override
     public void run() {
-        nowRun = true;
-        while(nowRun){
+        while(true){
             if(broker.hasConsumeEvent()){
                 broker.pollEvent().consumeEvent();
-
             }
             try {
                 Thread.sleep(3000);
@@ -28,10 +25,6 @@ public class BankEventConsumer<T extends BankEvent<?>> implements Runnable {
                 e.printStackTrace();
             }
         }
-    }
-
-    public void shutDownRun(){
-        nowRun = false;
     }
 
 }

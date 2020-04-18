@@ -1,12 +1,13 @@
 package com.javabom.producercomsumer.producercomsumer.service;
 
-import com.javabom.producercomsumer.producercomsumer.event.CardPayEvent;
-import com.javabom.producercomsumer.producercomsumer.event.CashPayEvent;
+import com.javabom.producercomsumer.producercomsumer.domain.CardPayHistoryRepository;
+import com.javabom.producercomsumer.producercomsumer.domain.CashPayHistoryRepository;
 import com.javabom.producercomsumer.producercomsumer.dto.CardPayRequestDto;
 import com.javabom.producercomsumer.producercomsumer.dto.CashPayRequestDto;
-import com.javabom.producercomsumer.producercomsumer.eventHandler.Broker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.function.Consumer;
 
 /**
  * Created by jyami on 2020/03/21
@@ -15,14 +16,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BankService {
 
-    private final Broker<CashPayEvent> cashBroker;
-    private final Broker<CardPayEvent> cardBroker;
+    private final CardPayHistoryRepository cardPayHistoryRepository;
+    private final CashPayHistoryRepository cashPayHistoryRepository;
 
-    public void registerCardPayEvent(CardPayRequestDto cardPayRequestDto){
-        cardBroker.registerEvent(new CardPayEvent(cardPayRequestDto));
+    public Consumer<CardPayRequestDto> saveCardPayHistory(){
+        return s -> cardPayHistoryRepository.save(s.of());
     }
 
-    public void registerCashPayEvent(CashPayRequestDto cashPayRequestDto){
-        cashBroker.registerEvent(new CashPayEvent(cashPayRequestDto));
+    public Consumer<CashPayRequestDto> saveCashPayHistory(){
+        return s -> cashPayHistoryRepository.save(s.of());
     }
 }

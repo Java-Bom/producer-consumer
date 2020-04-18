@@ -1,5 +1,6 @@
 package com.javabom.producercomsumer.producercomsumer.dto;
 
+import com.javabom.producercomsumer.producercomsumer.domain.CashPayHistory;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -16,5 +17,12 @@ public class CashPayRequestDto extends PayRequestDto {
                 "name='" + name + '\'' +
                 ", money=" + money +
                 '}';
+    }
+
+    public CashPayHistory of(){
+        return CashPayHistory.builder()
+                .money(money)
+                .name(name)
+                .build();
     }
 }

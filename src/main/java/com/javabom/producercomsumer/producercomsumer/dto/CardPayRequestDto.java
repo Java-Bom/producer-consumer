@@ -1,5 +1,7 @@
 package com.javabom.producercomsumer.producercomsumer.dto;
 
+import com.javabom.producercomsumer.producercomsumer.domain.CardPayHistory;
+import com.javabom.producercomsumer.producercomsumer.domain.CashPayHistory;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -16,5 +18,12 @@ public class CardPayRequestDto extends PayRequestDto {
                 "cardCompanyName='" + cardCompanyName + '\'' +
                 ", money=" + money +
                 '}';
+    }
+
+    public CardPayHistory of(){
+        return CardPayHistory.builder()
+                .money(money)
+                .company(cardCompanyName)
+                .build();
     }
 }

@@ -19,7 +19,8 @@ public class BankEventConsumer<T extends BankEvent<?>> implements Runnable {
         nowRun = true;
         while(nowRun){
             if(broker.hasConsumeEvent()){
-                broker.consumeEvent().getExecutionText();
+                broker.pollEvent().consumeEvent();
+
             }
             try {
                 Thread.sleep(3000);

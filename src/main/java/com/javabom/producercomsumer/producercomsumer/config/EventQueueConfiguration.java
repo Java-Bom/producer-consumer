@@ -23,21 +23,27 @@ public class EventQueueConfiguration {
     }
 
     @Bean
-    Broker<CashPayEvent> brokerCardCashPayEvent(){
-        log.info("-------------------makeBrokerGroup : CardPayEvent-------------------");
+    Broker<CashPayEvent> brokerCashPayEvent(){
+        log.info("-------------------makeBrokerGroup : CashPayEvent-------------------");
         return new Broker<>();
+
     }
 
     @Bean
     BankEventConsumer<CardPayEvent> bankEventConsumerCardPayEvent(){
         log.info("-------------------makeConsumer : CardPayEvent-------------------");
-        return new BankEventConsumer<>(brokerCardPayEvent());
+        BankEventConsumer<CardPayEvent> cardConsumer = new BankEventConsumer<>(brokerCardPayEvent());
+        new Thread(cardConsumer, "card-thread").start();
+        return cardConsumer;
+
     }
 
     @Bean
     BankEventConsumer<CashPayEvent> bankEventConsumerCashPayEvent(){
         log.info("-------------------makeConsumer : CashPayEvent-------------------");
-        return new BankEventConsumer<>(brokerCardCashPayEvent());
+        BankEventConsumer<CashPayEvent> cashConsumer = new BankEventConsumer<>(brokerCashPayEvent());
+        new Thread(cashConsumer, "cash-thread").start();
+        return cashConsumer;
     }
 
 }

@@ -1,6 +1,6 @@
 package com.javabom.producercomsumer.producercomsumer.domain;
 
-import com.javabom.producercomsumer.producercomsumer.dto.CardPaymentRequestDto;
+import com.javabom.producercomsumer.producercomsumer.dto.CardPayRequestDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -27,9 +27,9 @@ public class CardPayRecordEntity {
 
     private boolean complete;
 
-    public CardPayRecordEntity(CardPaymentRequestDto cardPaymentRequestDto, boolean complete) {
-        this.cardName = cardPaymentRequestDto.getCardCompany();
-        this.price = cardPaymentRequestDto.getPrice();
+    public CardPayRecordEntity(CardPayRequestDto cardPayRequestDto, boolean complete) {
+        this.cardName = cardPayRequestDto.getCardCompany();
+        this.price = cardPayRequestDto.getPrice();
         this.complete = complete;
     }
 }

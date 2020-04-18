@@ -7,13 +7,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CashPaymentRequestDto {
+public class CashPayRequestDto {
     private String userId;
     private String productName;
     private int price;
 
     @Builder
-    public CashPaymentRequestDto(String userId, String productName, int price) {
+    public CashPayRequestDto(String userId, String productName, int price) {
         this.userId = userId;
         this.productName = productName;
         this.price = price;

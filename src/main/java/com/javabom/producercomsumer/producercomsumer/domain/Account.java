@@ -1,7 +1,7 @@
 package com.javabom.producercomsumer.producercomsumer.domain;
 
-import com.javabom.producercomsumer.producercomsumer.dto.CardPaymentRequestDto;
-import com.javabom.producercomsumer.producercomsumer.dto.CashPaymentRequestDto;
+import com.javabom.producercomsumer.producercomsumer.dto.CardPayRequestDto;
+import com.javabom.producercomsumer.producercomsumer.dto.CashPayRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,14 +34,14 @@ public class Account {
         this.userId = userId;
     }
 
-    public void cardPay(CardPaymentRequestDto cardPaymentRequestDto, boolean complete) {
-        log.info("CardPay: {}, {}", cardPaymentRequestDto.getCardCompany(), cardPaymentRequestDto.getPrice());
-        this.cardPaymentHistories.add(new CardPayRecordEntity(cardPaymentRequestDto, complete));
+    public void cardPay(CardPayRequestDto cardPayRequestDto, boolean complete) {
+        log.info("CardPay: {}, {}", cardPayRequestDto.getCardCompany(), cardPayRequestDto.getPrice());
+        this.cardPaymentHistories.add(new CardPayRecordEntity(cardPayRequestDto, complete));
     }
 
-    public void cashPay(CashPaymentRequestDto cashPaymentRequestDto, boolean complete) {
-        log.info("CashPay: {}, {}", cashPaymentRequestDto.getProductName(), cashPaymentRequestDto.getPrice());
-        this.cashPaymentHistories.add(new CashPayRecordEntity(cashPaymentRequestDto, complete));
+    public void cashPay(CashPayRequestDto cashPayRequestDto, boolean complete) {
+        log.info("CashPay: {}, {}", cashPayRequestDto.getProductName(), cashPayRequestDto.getPrice());
+        this.cashPaymentHistories.add(new CashPayRecordEntity(cashPayRequestDto, complete));
     }
 
     public void clearCardPayHistories() {

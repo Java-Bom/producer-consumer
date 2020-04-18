@@ -24,8 +24,8 @@ Content-Type: application/json
 
 {
   "userId": "seojaeyeon",
-  "productName": "감자",
-  "price": 12000
+  "productName": "고구마",
+  "price": 17000
 }
 
 ###
@@ -45,8 +45,8 @@ Content-Type: application/json
 
 {
   "userId": "seojaeyeon",
-  "productName": "감자",
-  "price": 12000
+  "productName": "토마토",
+  "price": 11000
 }
 
 ###

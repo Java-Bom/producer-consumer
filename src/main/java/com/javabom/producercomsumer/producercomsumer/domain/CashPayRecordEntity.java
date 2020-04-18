@@ -1,6 +1,6 @@
 package com.javabom.producercomsumer.producercomsumer.domain;
 
-import com.javabom.producercomsumer.producercomsumer.dto.CashPaymentRequestDto;
+import com.javabom.producercomsumer.producercomsumer.dto.CashPayRequestDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,8 +27,8 @@ public class CashPayRecordEntity {
 
     private boolean complete;
 
-    public CashPayRecordEntity(CashPaymentRequestDto cashPaymentRequestDto, boolean complete) {
-        this.productName = cashPaymentRequestDto.getProductName();
+    public CashPayRecordEntity(CashPayRequestDto cashPayRequestDto, boolean complete) {
+        this.productName = cashPayRequestDto.getProductName();
         this.complete = complete;
     }
 }

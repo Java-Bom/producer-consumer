@@ -1,5 +1,8 @@
-package com.javabom.producercomsumer.producercomsumer.event;
+package com.javabom.producercomsumer.producercomsumer.event.handler;
 
+import com.javabom.producercomsumer.producercomsumer.event.CardPayEvent;
+import com.javabom.producercomsumer.producercomsumer.event.CashPayEvent;
+import com.javabom.producercomsumer.producercomsumer.event.EventBrokerGroup;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -25,6 +28,7 @@ public class PayEventTransactionListener {
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_ROLLBACK, classes = CashPayEvent.class)
     public void afterCashPayServiceRollBack(CashPayEvent payEvent) {
+        payEvent.count();
         if (!payEvent.isMaximumTry()) {
             log.info("이벤트큐에 재삽입: {}", payEvent);
             EventBrokerGroup.findPayEventBroker(CashPayEvent.class).offer(payEvent);

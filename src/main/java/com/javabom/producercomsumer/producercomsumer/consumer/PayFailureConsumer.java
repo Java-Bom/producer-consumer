@@ -18,15 +18,14 @@ public class PayFailureConsumer<T extends PayEvent> {
         this.consumer = consumer;
         this.threadPoolExecutor = threadPoolTaskExecutor;
         new Thread(this::pollEvent).start();
-        // threadPoolTaskExecutor.execute(this::consume); // 얘를 읽고 실행하는 하나의 스레드가 필요하다. 읽는건 하나, 수행하는건 여러개
     }
 
     private void pollEvent() {
         while (true) {
             log.info("Pick Event: {}", Thread.currentThread().getName());
             try {
-                T payEvent = this.eventBroker.poll(); // 하나의 스레드가 이벤트를 계속 꺼낸다.
-                threadPoolExecutor.execute(() -> consume(payEvent)); // 그리고 스레드풀에서 스레드를 꺼내 소모하도록 한다.
+                T payEvent = this.eventBroker.poll();
+                threadPoolExecutor.execute(() -> consume(payEvent));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

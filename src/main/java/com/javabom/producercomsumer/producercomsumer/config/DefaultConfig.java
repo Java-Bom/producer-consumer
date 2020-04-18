@@ -25,33 +25,14 @@ public class DefaultConfig {
     }
 
     @Bean
-    public PayFailureConsumer<CardPayEvent> cardPayEventPayFailureConsumer(CardPayService cardPayService, ThreadPoolTaskExecutor cardPayThreadPool) {
-        return new PayFailureConsumer<>(EventBrokerGroup.findFailureEventBroker(CardPayEvent.class), cardPayService::recordOfFailure, cardPayThreadPool);
+    public PayFailureConsumer<CardPayEvent> cardPayEventPayFailureConsumer(CardPayService cardPayService, ThreadPoolTaskExecutor cardPayFailureThreadPool) {
+        return new PayFailureConsumer<>(EventBrokerGroup.findFailureEventBroker(CardPayEvent.class), cardPayService::recordOfFailure, cardPayFailureThreadPool);
     }
 
     @Bean
-    public PayFailureConsumer<CashPayEvent> cashPayEventPayFailureConsumer(CashPayService cashPayService, ThreadPoolTaskExecutor cashPayThreadPool) {
-        return new PayFailureConsumer<>(EventBrokerGroup.findFailureEventBroker(CashPayEvent.class), cashPayService::recordOfFailure, cashPayThreadPool);
+    public PayFailureConsumer<CashPayEvent> cashPayEventPayFailureConsumer(CashPayService cashPayService, ThreadPoolTaskExecutor cashPayFailureThreadPool) {
+        return new PayFailureConsumer<>(EventBrokerGroup.findFailureEventBroker(CashPayEvent.class), cashPayService::recordOfFailure, cashPayFailureThreadPool);
     }
 
-    @Bean
-    public ThreadPoolTaskExecutor cardPayThreadPool() {
-        ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
-        threadPoolTaskExecutor.setMaxPoolSize(100);
-        threadPoolTaskExecutor.setCorePoolSize(20);
-        threadPoolTaskExecutor.setQueueCapacity(15); // 이만큼 늘어났을 때 스레드풀이 늘어난다.
-        threadPoolTaskExecutor.setThreadGroupName("CARD PAYMENT THREAD");
-        return threadPoolTaskExecutor;
-    }
-
-    @Bean
-    public ThreadPoolTaskExecutor cashPayThreadPool() {
-        ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
-        threadPoolTaskExecutor.setMaxPoolSize(100);
-        threadPoolTaskExecutor.setCorePoolSize(20);
-        threadPoolTaskExecutor.setQueueCapacity(15); // 이만큼 늘어났을 때 스레드풀이 늘어난다.
-        threadPoolTaskExecutor.setThreadGroupName("CASH PAYMENT THREAD");
-        return threadPoolTaskExecutor;
-    }
 
 }

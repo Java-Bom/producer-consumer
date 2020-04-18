@@ -1,7 +1,7 @@
 package com.javabom.producercomsumer.producercomsumer.consumer;
 
-import com.javabom.producercomsumer.producercomsumer.dto.CardPaymentRequestDto;
-import com.javabom.producercomsumer.producercomsumer.dto.CashPaymentRequestDto;
+import com.javabom.producercomsumer.producercomsumer.dto.CardPayRequestDto;
+import com.javabom.producercomsumer.producercomsumer.dto.CashPayRequestDto;
 import com.javabom.producercomsumer.producercomsumer.event.CardPayEvent;
 import com.javabom.producercomsumer.producercomsumer.event.CashPayEvent;
 import com.javabom.producercomsumer.producercomsumer.event.EventBroker;
@@ -26,8 +26,8 @@ class BankConsumerTest {
         BankConsumer<PayEvent> bankConsumer = new BankConsumer<>(eventEventBroker, testConsume(countDownLatch), testThreadExecutor());
 
         //when
-        eventEventBroker.offer(new CardPayEvent(new CardPaymentRequestDto()));
-        eventEventBroker.offer(new CashPayEvent(new CashPaymentRequestDto("user", "감자", 10000)));
+        eventEventBroker.offer(new CardPayEvent(new CardPayRequestDto()));
+        eventEventBroker.offer(new CashPayEvent(new CashPayRequestDto("user", "감자", 10000)));
 
         countDownLatch.await();
 

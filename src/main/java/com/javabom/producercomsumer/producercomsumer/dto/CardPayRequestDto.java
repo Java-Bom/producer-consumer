@@ -5,12 +5,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class CardPaymentRequestDto {
+public class CardPayRequestDto {
     private String userId;
     private int price;
     private String cardCompany;
 
-    public CardPaymentRequestDto(String userId, int price, String cardCompany) {
+    public CardPayRequestDto(String userId, int price, String cardCompany) {
         this.userId = userId;
         this.price = price;
         this.cardCompany = cardCompany;

@@ -22,6 +22,7 @@ public class EventBroker<T extends PayEvent> {
 
     public T poll() throws InterruptedException {
         while (eventQueue.size() <= 0) {
+            log.info("EventQueue에 Event가 없어 3초 대기합니다");
             Thread.sleep(3000);
         }
         return eventQueue.poll();

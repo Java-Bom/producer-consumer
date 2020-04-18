@@ -1,23 +1,22 @@
 package com.javabom.producercomsumer.producercomsumer.pay.domain.model;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CardPayment extends Payment {
 
     private String cardName;
 
-    protected CardPayment() {
-        super();
-    }
-
     @Builder
-    public CardPayment(String cardName, int money) {
-        super(money);
+    public CardPayment(String cardName, int money, boolean success) {
+        super(money, success);
         this.cardName = cardName;
     }
 
@@ -27,5 +26,6 @@ public class CardPayment extends Payment {
                 "cardName='" + cardName + '\'' +
                 '}';
     }
+
 }
 

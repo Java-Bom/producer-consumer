@@ -24,31 +24,39 @@ public class PaymentService {
     private final CardPaymentRepository cardPaymentRepository;
     private final CashPaymentRepository cashPaymentRepository;
 
-    public void addCardEnvent(CardEventRequestDto cardEventRequestDto) {
+    public void addCardEvent(CardEventRequestDto cardEventRequestDto) {
         log.info("addCashEvent : " + cardEventRequestDto);
         PaymentEvent paymentEvent = cardEventRequestDto.toEvent(this::saveCard);
-        PaymentEventBroker<PaymentEvent> paymentEventBroker = PaymentEventBrokerGroup.findByEvent(paymentEvent);
-        paymentEventBroker.add(paymentEvent);
+        supplyToBroker(paymentEvent);
     }
 
-    public void addCashEnvent(CashEventRequestDto cashEventRequestDto) {
+    public void addCashEvent(CashEventRequestDto cashEventRequestDto) {
         log.info("addCashEvent : " + cashEventRequestDto);
         PaymentEvent paymentEvent = cashEventRequestDto.toEvent(this::saveCash);
-        PaymentEventBroker<PaymentEvent> paymentEventBroker = PaymentEventBrokerGroup.findByEvent(paymentEvent);
-        paymentEventBroker.add(paymentEvent);
+        supplyToBroker(paymentEvent);
     }
 
-    @Transactional
-    public void saveCash(CashEvent cashEvent) {
-        CashPayment cashPayment = cashEvent.toEntity();
-        CashPayment save = cashPaymentRepository.save(cashPayment);
-        log.info("saveCashEvent({}) id: {}", save.getClass().getSimpleName(), save.getId());
+    private void supplyToBroker(final PaymentEvent paymentEvent) {
+        try {
+            PaymentEventBroker<PaymentEvent> paymentEventBroker = PaymentEventBrokerGroup.findByEvent(paymentEvent);
+            paymentEventBroker.add(paymentEvent);
+        } catch (IllegalStateException e) {
+            log.info(e.getMessage());
+            paymentEvent.failProcess(this::supplyToBroker);
+        }
     }
 
     @Transactional
     public void saveCard(CardEvent cardEvent) {
         CardPayment cardPayment = cardEvent.toEntity();
         CardPayment save = cardPaymentRepository.save(cardPayment);
-        log.info("saveCashEvent({}) id: {}", save.getClass().getSimpleName(), save.getId());
+        log.info("카드 이벤트 저장({}) id: {}", save.getClass().getSimpleName(), save.getId());
+    }
+
+    @Transactional
+    public void saveCash(CashEvent cashEvent) {
+        CashPayment cashPayment = cashEvent.toEntity();
+        CashPayment save = cashPaymentRepository.save(cashPayment);
+        log.info("현금 이벤트 저장({}) id: {}", save.getClass().getSimpleName(), save.getId());
     }
 }

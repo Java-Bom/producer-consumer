@@ -19,7 +19,18 @@ public abstract class Payment {
 
     private int money;
 
-    public Payment(final int money) {
+    private boolean success;
+
+    public Payment(final int money, final boolean success) {
         this.money = money;
+        this.success = success;
+    }
+
+    @Override
+    public String toString() {
+        return "Payment{" +
+                "id=" + id +
+                ", money=" + money +
+                '}';
     }
 }

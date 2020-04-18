@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.util.function.Consumer;
 
 @Getter
-public class CardEvent implements PaymentEvent {
+public class CardEvent extends PaymentEvent {
     private final String cardName;
     private final int money;
     private final Consumer<CardEvent> consumer;
@@ -24,6 +24,7 @@ public class CardEvent implements PaymentEvent {
         return CardPayment.builder()
                 .cardName(this.cardName)
                 .money(this.money)
+                .success(isSuccess())
                 .build();
     }
 
@@ -31,4 +32,5 @@ public class CardEvent implements PaymentEvent {
     public void consume() {
         this.consumer.accept(this);
     }
+
 }

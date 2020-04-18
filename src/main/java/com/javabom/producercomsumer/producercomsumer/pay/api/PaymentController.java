@@ -18,12 +18,12 @@ public class PaymentController {
 
     @PostMapping("cash")
     public void addPayEvent(@RequestBody CashEventRequestDto cashEventRequestDto) {
-        paymentService.addCashEnvent(cashEventRequestDto);
+        paymentService.addCashEvent(cashEventRequestDto);
     }
 
     @PostMapping("card")
     public void addCardEvent(@RequestBody CardEventRequestDto cardEventRequestDto) {
-        paymentService.addCardEnvent(cardEventRequestDto);
+        paymentService.addCardEvent(cardEventRequestDto);
     }
 
 }

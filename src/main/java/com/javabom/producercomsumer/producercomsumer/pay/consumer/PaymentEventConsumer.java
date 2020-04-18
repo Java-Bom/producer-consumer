@@ -12,7 +12,6 @@ public class PaymentEventConsumer<E extends PaymentEvent> implements Runnable {
 
     public PaymentEventConsumer(PaymentEventBroker<E> paymentEventBroker, String name) {
         this.paymentEventBroker = paymentEventBroker;
-
         new Thread(this, name).start();
     }
 
@@ -20,7 +19,7 @@ public class PaymentEventConsumer<E extends PaymentEvent> implements Runnable {
     public void run() {
         while (runnable) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -35,6 +34,5 @@ public class PaymentEventConsumer<E extends PaymentEvent> implements Runnable {
     public void stop() {
         this.runnable = false;
     }
-
 
 }

@@ -1,7 +1,6 @@
 package com.javabom.producercomsumer.producercomsumer.config;
 
 import com.javabom.producercomsumer.producercomsumer.consumer.BankConsumer;
-import com.javabom.producercomsumer.producercomsumer.consumer.PayFailureConsumer;
 import com.javabom.producercomsumer.producercomsumer.event.CardPayEvent;
 import com.javabom.producercomsumer.producercomsumer.event.CashPayEvent;
 import com.javabom.producercomsumer.producercomsumer.event.EventBrokerGroup;
@@ -23,16 +22,5 @@ public class DefaultConfig {
     public BankConsumer<CashPayEvent> payEventConsumer(CashPayService cashPayService, ThreadPoolTaskExecutor cashPayThreadPool) {
         return new BankConsumer<>(EventBrokerGroup.findPayEventBroker(CashPayEvent.class), cashPayService::pay, cashPayThreadPool);
     }
-
-    @Bean
-    public PayFailureConsumer<CardPayEvent> cardPayEventPayFailureConsumer(CardPayService cardPayService, ThreadPoolTaskExecutor cardPayFailureThreadPool) {
-        return new PayFailureConsumer<>(EventBrokerGroup.findFailureEventBroker(CardPayEvent.class), cardPayService::recordOfFailure, cardPayFailureThreadPool);
-    }
-
-    @Bean
-    public PayFailureConsumer<CashPayEvent> cashPayEventPayFailureConsumer(CashPayService cashPayService, ThreadPoolTaskExecutor cashPayFailureThreadPool) {
-        return new PayFailureConsumer<>(EventBrokerGroup.findFailureEventBroker(CashPayEvent.class), cashPayService::recordOfFailure, cashPayFailureThreadPool);
-    }
-
 
 }
